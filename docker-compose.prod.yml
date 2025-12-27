@@ -1,0 +1,9 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: map-guesser-game-app-prod
+    restart: always
+    ports:
+      - "2412:80"

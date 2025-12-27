@@ -1,0 +1,175 @@
+<!-- Language Selector - Always visible -->
+<div class="language-selector-top">
+  <select
+    [value]="getCurrentLanguage()"
+    (change)="onLanguageChange($event)"
+    class="language-select"
+  >
+    <option value="en">English</option>
+    <option value="da">Dansk</option>
+  </select>
+</div>
+
+<!-- Start Screen -->
+<div class="screen start-screen" *ngIf="gameService.screenState() === 'start'">
+  <div class="start-content">
+    <h1 class="game-title">{{ 'APP.TITLE' | translate }}</h1>
+    <p class="game-description">{{ 'START.DESCRIPTION' | translate }}</p>
+
+    <button class="btn btn-primary btn-large" (click)="gameService.startGame()">
+      {{ 'START.START_BUTTON' | translate }}
+    </button>
+
+    <div class="how-to-play">
+      <h2>{{ 'START.HOW_TO_PLAY' | translate }}</h2>
+      <ol>
+        <li>{{ 'START.STEP1' | translate }}</li>
+        <li>{{ 'START.STEP2' | translate }}</li>
+        <li>{{ 'START.STEP3' | translate }}</li>
+        <li>{{ 'START.STEP4' | translate }}</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Screen -->
+<div
+  class="screen settings-screen"
+  *ngIf="gameService.screenState() === 'settings'"
+>
+  <div class="settings-content">
+    <h1>{{ 'SETTINGS.TITLE' | translate }}</h1>
+    <p>{{ 'SETTINGS.CHOOSE_SETTINGS' | translate }}</p>
+
+    <app-controls
+      [initialCitiesCount]="gameService.getCitiesCount()"
+      [maxCitiesInput]="gameService.getTotalCityCount()"
+      (citiesCountChange)="onCitiesCountChange($event)"
+      (difficultyChange)="onDifficultyChange($event)"
+    />
+
+    <button
+      class="btn btn-primary btn-large"
+      (click)="gameService.beginPlaying()"
+    >
+      {{ 'SETTINGS.START_PLAYING' | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- Playing Screen -->
+<div
+  class="screen playing-screen"
+  *ngIf="gameService.screenState() === 'playing'"
+>
+  <app-map [city]="gameService.currentCity()" [style]="gameService.style()" />
+
+  <!-- Game Overlay -->
+  <div class="game-overlay" [class.hidden]="uiHidden">
+    <div class="overlay-header">
+      <button class="btn btn-secondary btn-small" (click)="toggleUI()">
+        {{ 'GAME.TOGGLE_UI' | translate }}
+      </button>
+      <button class="btn btn-danger btn-small" (click)="gameService.endGame()">
+        {{ 'GAME.END_GAME' | translate }}
+      </button>
+    </div>
+
+    <app-game
+      [availableCities]="gameService.getAvailableCityNames()"
+      [totalSelectedCities]="gameService.getCitiesCount()"
+      [attemptedCount]="gameService.getAttemptedCount()"
+      [remainingCount]="gameService.getRemainingCount()"
+      (guessSubmitted)="onGuessSubmitted($event)"
+      (nextCityRequested)="onNextCityRequested()"
+      (restartRequested)="onRestartRequested()"
+    />
+  </div>
+
+  <!-- Toggle button when UI is hidden -->
+  <button
+    class="btn btn-secondary btn-floating"
+    *ngIf="uiHidden"
+    (click)="toggleUI()"
+  >
+    👁️
+  </button>
+</div>
+
+<!-- Results Screen -->
+<div
+  class="screen results-screen"
+  *ngIf="gameService.screenState() === 'finished'"
+>
+  <div class="results-content">
+    <!-- Perfect game -->
+    <div *ngIf="gameService.gameState() === 'completed'">
+      <h1>{{ 'RESULTS.PERFECT_TITLE' | translate }}</h1>
+      <p class="results-message">
+        {{ 'RESULTS.PERFECT_MESSAGE' | translate: {count:
+        gameService.finalScore()} }}
+      </p>
+    </div>
+
+    <!-- New high score -->
+    <div
+      *ngIf="gameService.gameState() !== 'completed' && gameService.isNewHighScore()"
+    >
+      <h1>{{ 'RESULTS.NEW_HIGH_SCORE_TITLE' | translate }}</h1>
+      <p class="results-message">
+        {{ 'RESULTS.NEW_HIGH_SCORE_MESSAGE' | translate: {score:
+        gameService.finalScore()} }}
+      </p>
+    </div>
+
+    <!-- Regular game over -->
+    <div
+      *ngIf="gameService.gameState() !== 'completed' && !gameService.isNewHighScore()"
+    >
+      <h1>{{ 'RESULTS.GAME_OVER_TITLE' | translate }}</h1>
+      <p class="results-message">
+        {{ 'RESULTS.GAME_OVER_MESSAGE' | translate: {score:
+        gameService.finalScore()} }}
+      </p>
+    </div>
+
+    <div class="score-display">
+      <div class="score-item">
+        <span class="score-label">{{ 'RESULTS.FINAL_SCORE' | translate }}</span>
+        <span class="score-value"
+          >{{ gameService.finalScore() }} / {{ gameService.getCitiesCount() }}
+          ({{ ((gameService.finalScore() / gameService.getCitiesCount()) * 100)
+          | number:'1.0-0' }}%)</span
+        >
+      </div>
+      <div class="score-item">
+        <span class="score-label">{{ 'RESULTS.HIGH_SCORE' | translate }}</span>
+        <span class="score-value"
+          >{{ gameService.highScore() }} / {{ gameService.getCitiesCount() }}
+          ({{ ((gameService.highScore() / gameService.getCitiesCount()) * 100) |
+          number:'1.0-0' }}%)</span
+        >
+      </div>
+    </div>
+
+    <div class="results-actions">
+      <ng-container
+        *ngIf="gameService.gameState() !== 'completed'; else perfectActions"
+      >
+        <button class="btn btn-primary" (click)="playAgain()">
+          {{ 'RESULTS.PLAY_AGAIN' | translate }}
+        </button>
+        <button class="btn btn-secondary" (click)="gameService.returnToStart()">
+          {{ 'RESULTS.MAIN_MENU' | translate }}
+        </button>
+      </ng-container>
+      <ng-template #perfectActions>
+        <button class="btn btn-secondary" (click)="gameService.returnToStart()">
+          {{ 'RESULTS.MAIN_MENU' | translate }}
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<router-outlet />

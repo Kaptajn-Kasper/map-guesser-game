@@ -1,0 +1,74 @@
+{
+  "APP": {
+    "TITLE": "Guess a City",
+    "SUBTITLE": "Identify Danish cities using only roads and water",
+    "FOOTER": "Built with Angular & MapLibre GL | Data: OpenStreetMap & Statistics Denmark"
+  },
+  "START": {
+    "DESCRIPTION": "Test your knowledge of Danish cities by identifying them from their road networks and waterways.",
+    "START_BUTTON": "Start Game",
+    "HOW_TO_PLAY": "How to Play",
+    "STEP1": "Choose your difficulty and number of cities",
+    "STEP2": "Study the map showing only roads and water",
+    "STEP3": "Guess which Danish city it is",
+    "STEP4": "Build up your streak for a high score!"
+  },
+  "SETTINGS": {
+    "TITLE": "Game Settings",
+    "CHOOSE_SETTINGS": "Choose your challenge level",
+    "CITIES_COUNT_EXPLANATION": "Select how many of the largest cities to include. Lower values include fewer (but larger) cities. Higher values include more cities.",
+    "DIFFICULTY_EXPLANATION": "Difficulty controls how much of the map is visible. Easier modes show more roads, while harder modes show less detail.",
+    "START_PLAYING": "Start Playing →"
+  },
+  "CONTROLS": {
+    "CITIES_COUNT": "Number of cities",
+    "CITIES_COUNT_DESCRIPTION": "Select how many of the largest cities to include.",
+    "TOTAL_CITIES": "Total cities available",
+    "DIFFICULTY": "Difficulty",
+    "DIFFICULTY_EASY": "Easy (All roads + water)",
+    "DIFFICULTY_MEDIUM": "Medium (Major roads + water)",
+    "DIFFICULTY_HARD": "Hard (Primary roads + water)",
+    "DIFFICULTY_EXTREME": "Extreme (Water only)"
+  },
+  "GAME": {
+    "CURRENT_STREAK": "Current Streak",
+    "CORRECT_SO_FAR": "Correct",
+    "ATTEMPTED": "Attempted",
+    "REMAINING": "Remaining",
+    "HIGH_SCORE": "High Score",
+    "ENTER_CITY": "Enter city name...",
+    "SUBMIT_GUESS": "Submit Guess",
+    "CORRECT": "Correct!",
+    "CORRECT_MESSAGE": "You guessed {{city}} correctly!",
+    "WRONG": "Wrong!",
+    "YOUR_GUESS": "Your guess",
+    "CORRECT_ANSWER": "Correct answer",
+    "STREAK_RESET": "Streak reset to 0",
+    "NEXT_CITY": "Next City →",
+    "TRY_ANOTHER": "Try Another City →",
+    "CONGRATULATIONS": "Congratulations! 🎉",
+    "ALL_GUESSED": "You've guessed all {{count}} cities correctly!",
+    "PERFECT_SCORE": "Perfect Score!",
+    "PLAY_AGAIN": "Play Again →",
+    "END_GAME": "End Game",
+    "TOGGLE_UI": "Toggle UI"
+  },
+  "RESULTS": {
+    "PERFECT_TITLE": "Perfect Game! 🎉",
+    "PERFECT_MESSAGE": "You guessed all {{count}} cities correctly!",
+    "NEW_HIGH_SCORE_TITLE": "🏆 New High Score! 🏆",
+    "NEW_HIGH_SCORE_MESSAGE": "You achieved a streak of {{score}} cities!",
+    "GAME_OVER_TITLE": "Game Over",
+    "GAME_OVER_MESSAGE": "You guessed {{score}} cities correctly.",
+    "FINAL_SCORE": "Final Score",
+    "HIGH_SCORE": "High Score",
+    "PLAY_AGAIN": "Play Again",
+    "CHANGE_SETTINGS": "Change Settings",
+    "MAIN_MENU": "Main Menu"
+  },
+  "LANGUAGE": {
+    "SWITCH": "Language",
+    "ENGLISH": "English",
+    "DANISH": "Dansk"
+  }
+}

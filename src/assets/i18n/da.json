@@ -1,0 +1,74 @@
+{
+  "APP": {
+    "TITLE": "Gæt en by!",
+    "SUBTITLE": "Identificer danske byer ved kun at bruge veje og vand",
+    "FOOTER": "Bygget med Angular & MapLibre GL | Data: OpenStreetMap & Danmarks Statistik"
+  },
+  "START": {
+    "DESCRIPTION": "Test din viden om danske byer ved at identificere dem ud fra deres vejnet og vandveje.",
+    "START_BUTTON": "Start spil",
+    "HOW_TO_PLAY": "Sådan spiller du",
+    "STEP1": "Vælg din sværhedsgrad og antal byer",
+    "STEP2": "Studér kortet der kun viser veje og vand",
+    "STEP3": "Gæt hvilken dansk by det er",
+    "STEP4": "Byg din streak op for en høj score!"
+  },
+  "SETTINGS": {
+    "TITLE": "Spilindstillinger",
+    "CHOOSE_SETTINGS": "Vælg dit udfordringsniveau",
+    "CITIES_COUNT_EXPLANATION": "Vælg hvor mange af de største byer der skal med. Lavere værdier inkluderer færre (men større) byer. Højere værdier inkluderer flere byer.",
+    "DIFFICULTY_EXPLANATION": "Sværhedsgraden styrer hvor meget af kortet der er synligt. Lettere niveauer viser flere veje, mens sværere niveauer viser færre detaljer.",
+    "START_PLAYING": "Start spillet →"
+  },
+  "CONTROLS": {
+    "CITIES_COUNT": "Antal byer",
+    "CITIES_COUNT_DESCRIPTION": "Vælg hvor mange af de største byer der skal med.",
+    "TOTAL_CITIES": "Samlede antal byer",
+    "DIFFICULTY": "Sværhedsgrad",
+    "DIFFICULTY_EASY": "Let (Alle veje + vand)",
+    "DIFFICULTY_MEDIUM": "Mellem (Store veje + vand)",
+    "DIFFICULTY_HARD": "Svær (Primære veje + vand)",
+    "DIFFICULTY_EXTREME": "Ekstremt (Kun vand)"
+  },
+  "GAME": {
+    "CURRENT_STREAK": "Nuværende streak",
+    "CORRECT_SO_FAR": "Korrekte",
+    "ATTEMPTED": "Forsøg",
+    "REMAINING": "Tilbage",
+    "HIGH_SCORE": "Højeste score",
+    "ENTER_CITY": "Indtast bynavn...",
+    "SUBMIT_GUESS": "Indsend gæt",
+    "CORRECT": "Korrekt!",
+    "CORRECT_MESSAGE": "Du gættede {{city}} korrekt!",
+    "WRONG": "Forkert!",
+    "YOUR_GUESS": "Dit gæt",
+    "CORRECT_ANSWER": "Korrekt svar",
+    "STREAK_RESET": "Streak nulstillet til 0",
+    "NEXT_CITY": "Næste by →",
+    "TRY_ANOTHER": "Prøv en anden by →",
+    "CONGRATULATIONS": "Tillykke! 🎉",
+    "ALL_GUESSED": "Du har gættet alle {{count}} byer korrekt!",
+    "PERFECT_SCORE": "Perfekt score!",
+    "PLAY_AGAIN": "Spil igen →",
+    "END_GAME": "Afslut spil",
+    "TOGGLE_UI": "Vis kort"
+  },
+  "RESULTS": {
+    "PERFECT_TITLE": "Perfekt spil! 🎉",
+    "PERFECT_MESSAGE": "Du gættede alle {{count}} byer korrekt!",
+    "NEW_HIGH_SCORE_TITLE": "🏆 Ny højeste score! 🏆",
+    "NEW_HIGH_SCORE_MESSAGE": "Du opnåede en streak på {{score}} byer!",
+    "GAME_OVER_TITLE": "Spillet er slut",
+    "GAME_OVER_MESSAGE": "Du gættede {{score}} byer korrekt.",
+    "FINAL_SCORE": "Endelig score",
+    "HIGH_SCORE": "Højeste score",
+    "PLAY_AGAIN": "Spil igen",
+    "CHANGE_SETTINGS": "Skift indstillinger",
+    "MAIN_MENU": "Hovedmenu"
+  },
+  "LANGUAGE": {
+    "SWITCH": "Sprog",
+    "ENGLISH": "English",
+    "DANISH": "Dansk"
+  }
+}

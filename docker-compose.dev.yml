@@ -1,0 +1,22 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: map-guesser-game-nginx-dev
+    ports:
+      - "2412:80"
+    volumes:
+      - ./nginx/development.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: ./ # The build context, where the Dockerfile is located
+      dockerfile: Dockerfile.dev # The Dockerfile to use for building the image
+    container_name: map-guesser-game-app-dev # The name of the container
+    restart: always # Always restart the container if it stops
+    ports:
+      - 4200:4200 # Map port 4200 on the host to port 4200 on the container
+    volumes:
+      - ./:/app # Mount the ./app directory on the host to /app in the container
+      - /app/node_modules # Anonymous volume to persist node_modules
