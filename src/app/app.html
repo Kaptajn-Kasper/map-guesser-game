@@ -1,24 +1,33 @@
 <!-- Language Selector - Always visible -->
 <div class="language-selector-top">
-  <select
-    [value]="getCurrentLanguage()"
-    (change)="onLanguageChange($event)"
-    class="language-select"
-  >
-    <option value="en">English</option>
-    <option value="da">Dansk</option>
-  </select>
+  <p-select
+    [options]="languageOptions"
+    [(ngModel)]="selectedLanguage"
+    optionLabel="label"
+    optionValue="value"
+    (onChange)="onLanguageChange()"
+    [style]="{ minWidth: '120px' }"
+  />
 </div>
 
 <!-- Start Screen -->
 <div class="screen start-screen" *ngIf="gameService.screenState() === 'start'">
   <div class="start-content">
+    <img
+      src="assets/brand/logo-2-color-secondary-variant-1.svg"
+      alt="Kaptajn logo"
+      class="brand-logo"
+    />
     <h1 class="game-title">{{ 'APP.TITLE' | translate }}</h1>
     <p class="game-description">{{ 'START.DESCRIPTION' | translate }}</p>
 
-    <button class="btn btn-primary btn-large" (click)="gameService.startGame()">
-      {{ 'START.START_BUTTON' | translate }}
-    </button>
+    <p-button
+      [label]="'START.START_BUTTON' | translate"
+      (onClick)="gameService.startGame()"
+      severity="primary"
+      size="large"
+      styleClass="w-full"
+    />
 
     <div class="how-to-play">
       <h2>{{ 'START.HOW_TO_PLAY' | translate }}</h2>
@@ -48,12 +57,13 @@
       (difficultyChange)="onDifficultyChange($event)"
     />
 
-    <button
-      class="btn btn-primary btn-large"
-      (click)="gameService.beginPlaying()"
-    >
-      {{ 'SETTINGS.START_PLAYING' | translate }}
-    </button>
+    <p-button
+      [label]="'SETTINGS.START_PLAYING' | translate"
+      (onClick)="gameService.beginPlaying()"
+      severity="primary"
+      size="large"
+      styleClass="w-full"
+    />
   </div>
 </div>
 
@@ -67,12 +77,18 @@
   <!-- Game Overlay -->
   <div class="game-overlay" [class.hidden]="uiHidden">
     <div class="overlay-header">
-      <button class="btn btn-secondary btn-small" (click)="toggleUI()">
-        {{ 'GAME.TOGGLE_UI' | translate }}
-      </button>
-      <button class="btn btn-danger btn-small" (click)="gameService.endGame()">
-        {{ 'GAME.END_GAME' | translate }}
-      </button>
+      <p-button
+        [label]="'GAME.TOGGLE_UI' | translate"
+        (onClick)="toggleUI()"
+        severity="secondary"
+        size="small"
+      />
+      <p-button
+        [label]="'GAME.END_GAME' | translate"
+        (onClick)="gameService.endGame()"
+        severity="danger"
+        size="small"
+      />
     </div>
 
     <app-game
@@ -87,13 +103,14 @@
   </div>
 
   <!-- Toggle button when UI is hidden -->
-  <button
-    class="btn btn-secondary btn-floating"
+  <p-button
     *ngIf="uiHidden"
-    (click)="toggleUI()"
-  >
-    👁️
-  </button>
+    (onClick)="toggleUI()"
+    icon="pi pi-eye"
+    [rounded]="true"
+    severity="secondary"
+    styleClass="btn-floating"
+  />
 </div>
 
 <!-- Results Screen -->
@@ -156,17 +173,23 @@
       <ng-container
         *ngIf="gameService.gameState() !== 'completed'; else perfectActions"
       >
-        <button class="btn btn-primary" (click)="playAgain()">
-          {{ 'RESULTS.PLAY_AGAIN' | translate }}
-        </button>
-        <button class="btn btn-secondary" (click)="gameService.returnToStart()">
-          {{ 'RESULTS.MAIN_MENU' | translate }}
-        </button>
+        <p-button
+          [label]="'RESULTS.PLAY_AGAIN' | translate"
+          (onClick)="playAgain()"
+          severity="primary"
+        />
+        <p-button
+          [label]="'RESULTS.MAIN_MENU' | translate"
+          (onClick)="gameService.returnToStart()"
+          severity="secondary"
+        />
       </ng-container>
       <ng-template #perfectActions>
-        <button class="btn btn-secondary" (click)="gameService.returnToStart()">
-          {{ 'RESULTS.MAIN_MENU' | translate }}
-        </button>
+        <p-button
+          [label]="'RESULTS.MAIN_MENU' | translate"
+          (onClick)="gameService.returnToStart()"
+          severity="secondary"
+        />
       </ng-template>
     </div>
   </div>

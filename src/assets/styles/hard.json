@@ -12,7 +12,7 @@
       "id": "background",
       "type": "background",
       "paint": {
-        "background-color": "#f9f9f9"
+        "background-color": "#f3ecf7"
       }
     },
     {
@@ -21,7 +21,7 @@
       "source": "openmaptiles",
       "source-layer": "water",
       "paint": {
-        "fill-color": "#4a4a4a"
+        "fill-color": "#0c5460"
       }
     },
     {
@@ -30,7 +30,7 @@
       "source": "openmaptiles",
       "source-layer": "waterway",
       "paint": {
-        "line-color": "#4a4a4a",
+        "line-color": "#0c5460",
         "line-width": 1
       }
     },
@@ -41,7 +41,7 @@
       "source-layer": "transportation",
       "filter": ["==", "class", "primary"],
       "paint": {
-        "line-color": "#000000",
+        "line-color": "#432b54",
         "line-width": 1
       }
     },
@@ -52,7 +52,7 @@
       "source-layer": "transportation",
       "filter": ["==", "class", "motorway"],
       "paint": {
-        "line-color": "#000000",
+        "line-color": "#432b54",
         "line-width": 1.5
       }
     }
