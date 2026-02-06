@@ -18,6 +18,12 @@ export const BrandPreset = definePreset(Aura, {
     },
     colorScheme: {
       light: {
+        primary: {
+          color: '{primary.500}',
+          contrastColor: '#ffffff',
+          hoverColor: '{primary.600}',
+          activeColor: '{primary.700}',
+        },
         surface: {
           0: '#ffffff',
           50: '#f8f6fa',
@@ -34,6 +40,12 @@ export const BrandPreset = definePreset(Aura, {
         },
       },
       dark: {
+        primary: {
+          color: '{primary.400}',
+          contrastColor: '#ffffff',
+          hoverColor: '{primary.300}',
+          activeColor: '{primary.200}',
+        },
         surface: {
           0: '#ffffff',
           50: '#f8f6fa',
