@@ -92,7 +92,7 @@
     </div>
 
     <app-game
-      [availableCities]="gameService.getAvailableCityNames()"
+      [choiceOptions]="gameService.choiceOptions()"
       [totalSelectedCities]="gameService.getCitiesCount()"
       [attemptedCount]="gameService.getAttemptedCount()"
       [remainingCount]="gameService.getRemainingCount()"

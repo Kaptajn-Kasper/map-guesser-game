@@ -11,7 +11,7 @@ import { City } from '../../models/city.model';
     `
       .map-container {
         width: 100%;
-        height: 600px;
+        height: 100%;
         overflow: hidden;
       }
     `,

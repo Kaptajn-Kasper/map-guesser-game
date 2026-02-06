@@ -26,6 +26,7 @@ export class GameService {
   lastGuess = signal<string>('');
   finalScore = signal<number>(0);
   isNewHighScore = signal<boolean>(false);
+  choiceOptions = signal<string[]>([]);
 
   private usedCities: Set<string> = new Set();
 
@@ -125,6 +126,34 @@ export class GameService {
     this.currentCity.set(eligibleCities[randomIndex]);
     this.gameState.set('playing');
     this.lastGuess.set('');
+    this.generateChoiceOptions();
+  }
+
+  private generateChoiceOptions(count = 4): void {
+    const correctName = this.currentCity()?.name;
+    if (!correctName) return;
+
+    const topN = this.sortedCities.slice(0, this.citiesToInclude());
+    let wrongPool = topN
+      .filter((c) => c.name !== correctName)
+      .map((c) => c.name);
+
+    // Fall back to all cities if the selected pool is too small
+    if (wrongPool.length < count - 1) {
+      wrongPool = this.sortedCities
+        .filter((c) => c.name !== correctName)
+        .map((c) => c.name);
+    }
+
+    // Shuffle and pick count-1 wrong answers
+    const shuffled = wrongPool.sort(() => Math.random() - 0.5);
+    const wrongAnswers = shuffled.slice(0, count - 1);
+
+    // Combine and shuffle all options
+    const options = [correctName, ...wrongAnswers].sort(
+      () => Math.random() - 0.5
+    );
+    this.choiceOptions.set(options);
   }
 
   submitGuess(guess: string): boolean {

@@ -1,14 +1,12 @@
 import { Component, output, input, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, AutoComplete, Button],
+  imports: [CommonModule, TranslateModule, Button],
   template: `
     <div class="game-panel">
       <div class="streak">
@@ -29,29 +27,19 @@ import { Button } from 'primeng/button';
         {{ remainingCount() }}
       </p>
 
-      <div class="guess-form">
-        <p-autocomplete
-          [(ngModel)]="guess"
-          [suggestions]="filteredCities"
-          (completeMethod)="filterCities($event)"
-          [placeholder]="'GAME.ENTER_CITY' | translate"
-          [disabled]="gameState !== 'playing'"
-          (keydown.enter)="onSubmit()"
-          [forceSelection]="false"
-          [dropdown]="false"
-          styleClass="guess-autocomplete"
-        />
-        <p-button
-          [label]="'GAME.SUBMIT_GUESS' | translate"
-          (onClick)="onSubmit()"
-          [disabled]="!guess || gameState !== 'playing'"
-          severity="primary"
-        />
+      @if (gameState === 'playing') {
+      <div class="choice-grid">
+        @for (option of choiceOptions(); track option) {
+        <button class="choice-btn" (click)="onChoiceSelected(option)">
+          {{ option }}
+        </button>
+        }
       </div>
+      }
 
       @if (gameState === 'correct') {
       <div class="feedback correct">
-        <h3>✓ {{ 'GAME.CORRECT' | translate }}</h3>
+        <h3>{{ 'GAME.CORRECT' | translate }}</h3>
         <p>{{ 'GAME.CORRECT_MESSAGE' | translate : { city: lastGuess } }}</p>
         <p-button
           [label]="'GAME.NEXT_CITY' | translate"
@@ -61,7 +49,7 @@ import { Button } from 'primeng/button';
       </div>
       } @if (gameState === 'wrong') {
       <div class="feedback wrong">
-        <h3>✗ {{ 'GAME.WRONG' | translate }}</h3>
+        <h3>{{ 'GAME.WRONG' | translate }}</h3>
         <p>
           {{ 'GAME.YOUR_GUESS' | translate }}: <strong>{{ lastGuess }}</strong>
         </p>
@@ -88,15 +76,12 @@ import { Button } from 'primeng/button';
   styles: [
     `
       .game-panel {
-        background: var(--brand-bg-card);
-        padding: 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
       }
 
       .streak {
         text-align: center;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
 
         h2 {
           margin: 0;
@@ -119,36 +104,48 @@ import { Button } from 'primeng/button';
         text-align: center;
       }
 
-      .guess-form {
-        display: flex;
-        gap: 0.5rem;
+      .choice-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
         margin-bottom: 1rem;
-
-        :host ::ng-deep .guess-autocomplete {
-          flex: 1;
-
-          .p-autocomplete-input {
-            width: 100%;
-          }
-        }
       }
 
-      /* Mobile: stack input and submit button vertically */
-      @media (max-width: 600px) {
-        .guess-form {
-          flex-direction: column;
+      .choice-btn {
+        padding: 1rem 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: 2px solid var(--brand-primary);
+        border-radius: 8px;
+        background: var(--brand-bg-card);
+        color: var(--brand-text-primary);
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          transform 0.1s;
+        text-align: center;
+        min-height: 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-          :host ::ng-deep .guess-autocomplete {
-            width: 100%;
-          }
+      .choice-btn:hover {
+        background: var(--brand-primary);
+        color: var(--brand-text-light);
+      }
 
-          :host ::ng-deep p-button {
-            width: 100%;
+      .choice-btn:active {
+        transform: scale(0.97);
+      }
 
-            .p-button {
-              width: 100%;
-            }
-          }
+      @media (max-width: 400px) {
+        .choice-grid {
+          gap: 0.5rem;
+        }
+        .choice-btn {
+          font-size: 1rem;
+          padding: 0.75rem 0.5rem;
         }
       }
 
@@ -206,45 +203,32 @@ import { Button } from 'primeng/button';
   ],
 })
 export class GameComponent {
-  availableCities = input.required<string[]>();
+  choiceOptions = input.required<string[]>();
   totalSelectedCities = input<number>(0);
   attemptedCount = input<number>(0);
   remainingCount = input<number>(0);
 
-  guess = '';
   streak = 0;
   highScore = 0;
   gameState: 'playing' | 'correct' | 'wrong' | 'completed' = 'playing';
   lastGuess = '';
   correctAnswer = '';
-  filteredCities: string[] = [];
 
   guessSubmitted = output<string>();
   nextCityRequested = output<void>();
   restartRequested = output<void>();
 
-  filterCities(event: AutoCompleteCompleteEvent): void {
-    const query = event.query.toLowerCase();
-    this.filteredCities = this.availableCities().filter((city) =>
-      city.toLowerCase().includes(query)
-    );
-  }
-
-  onSubmit(): void {
-    if (this.guess && this.guess.trim()) {
-      this.guessSubmitted.emit(this.guess.trim());
+  onChoiceSelected(city: string): void {
+    if (this.gameState === 'playing') {
+      this.guessSubmitted.emit(city);
     }
   }
 
   onNextCity(): void {
-    this.guess = '';
-    this.filteredCities = [];
     this.nextCityRequested.emit();
   }
 
   onRestart(): void {
-    this.guess = '';
-    this.filteredCities = [];
     this.restartRequested.emit();
   }
 
