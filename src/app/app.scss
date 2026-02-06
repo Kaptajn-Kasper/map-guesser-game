@@ -1,8 +1,8 @@
 // Language selector at top
 .language-selector-top {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: calc(1rem + env(safe-area-inset-top));
+  right: calc(1rem + env(safe-area-inset-right));
   z-index: 1000;
 }
 
@@ -13,6 +13,10 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  padding-top: max(2rem, env(safe-area-inset-top));
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  padding-left: max(2rem, env(safe-area-inset-left));
+  padding-right: max(2rem, env(safe-area-inset-right));
 }
 
 // Start Screen
@@ -153,7 +157,7 @@
 
   .game-overlay {
     position: absolute;
-    bottom: 2rem;
+    bottom: calc(2rem + env(safe-area-inset-bottom));
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
@@ -186,8 +190,8 @@
 
   :host ::ng-deep .btn-floating {
     position: absolute !important;
-    bottom: 2rem;
-    right: 2rem;
+    bottom: calc(2rem + env(safe-area-inset-bottom));
+    right: calc(2rem + env(safe-area-inset-right));
     width: 60px !important;
     height: 60px !important;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
