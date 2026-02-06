@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile.prod
     container_name: map-guesser-game-app-prod
     restart: always
+    ports:
+      - "127.0.0.1:2412:80"
     networks:
       - caddy-network
 
