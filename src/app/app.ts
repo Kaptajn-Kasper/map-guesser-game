@@ -1,7 +1,10 @@
 import { Component, ViewChild, effect, AfterViewInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { Select } from 'primeng/select';
+import { Button } from 'primeng/button';
 import { GameService } from './services/game.service';
 import { MapComponent } from './components/map/map.component';
 import { ControlsComponent } from './components/controls/controls.component';
@@ -13,10 +16,13 @@ import { Difficulty } from './models/city.model';
   imports: [
     CommonModule,
     RouterOutlet,
+    FormsModule,
     MapComponent,
     ControlsComponent,
     GameComponent,
     TranslateModule,
+    Select,
+    Button,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -28,6 +34,12 @@ export class App implements AfterViewInit {
   uiHidden = false;
   private wrongEndTimeout: number | undefined;
 
+  languageOptions = [
+    { label: 'English', value: 'en' },
+    { label: 'Dansk', value: 'da' },
+  ];
+  selectedLanguage: string;
+
   constructor(
     public gameService: GameService,
     private translate: TranslateService
@@ -36,6 +48,7 @@ export class App implements AfterViewInit {
     const savedLang = localStorage.getItem('map-guesser-language') || 'da';
     translate.setFallbackLang('da');
     translate.use(savedLang);
+    this.selectedLanguage = savedLang;
 
     // Update components when game state changes
     effect(() => {
@@ -118,14 +131,9 @@ export class App implements AfterViewInit {
     this.gameService.restartAfterCompletion();
   }
 
-  switchLanguage(lang: string): void {
-    this.translate.use(lang);
-    localStorage.setItem('map-guesser-language', lang);
-  }
-
-  onLanguageChange(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    this.switchLanguage(select.value);
+  onLanguageChange(): void {
+    this.translate.use(this.selectedLanguage);
+    localStorage.setItem('map-guesser-language', this.selectedLanguage);
   }
 
   getCurrentLanguage(): string {

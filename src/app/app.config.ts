@@ -8,6 +8,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { providePrimeNG } from 'primeng/config';
+import { BrandPreset } from './theme/brand-preset';
 
 import { routes } from './app.routes';
 
@@ -31,6 +33,11 @@ export const appConfig: ApplicationConfig = {
         provide: TranslateLoader,
         useFactory: (http: HttpClient) => new CustomTranslateLoader(http),
         deps: [HttpClient],
+      },
+    }),
+    providePrimeNG({
+      theme: {
+        preset: BrandPreset,
       },
     }),
   ],

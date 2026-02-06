@@ -1,29 +1,30 @@
 import { Component, output, input, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Slider } from 'primeng/slider';
+import { Select } from 'primeng/select';
 import { Difficulty } from '../../models/city.model';
 
 @Component({
   selector: 'app-controls',
   standalone: true,
-  imports: [FormsModule, TranslateModule],
+  imports: [FormsModule, TranslateModule, Slider, Select],
   template: `
     <div class="controls">
       <div class="control-group">
         <label for="cities-count">
-          {{ 'CONTROLS.CITIES_COUNT' | translate }}: {{ selectedCitiesCount() }}
+          {{ 'CONTROLS.CITIES_COUNT' | translate }}: {{ sliderValue }}
         </label>
         <p class="control-description">
           {{ 'CONTROLS.CITIES_COUNT_DESCRIPTION' | translate }}
         </p>
-        <input
-          type="range"
-          id="cities-count"
-          [value]="selectedCitiesCount()"
+        <p-slider
+          [(ngModel)]="sliderValue"
           [min]="1"
           [max]="maxCities()"
-          step="1"
-          (input)="onCitiesCountChange($event)"
+          [step]="1"
+          (onChange)="onSliderChange()"
+          styleClass="brand-slider"
         />
         <small
           >{{ 'CONTROLS.TOTAL_CITIES' | translate }}: {{ maxCities() }}</small
@@ -35,31 +36,21 @@ import { Difficulty } from '../../models/city.model';
         <p class="control-description">
           {{ 'SETTINGS.DIFFICULTY_EXPLANATION' | translate }}
         </p>
-        <select
-          id="difficulty"
-          [value]="difficulty"
-          (change)="onDifficultyChange($event)"
-        >
-          <option value="easy">
-            {{ 'CONTROLS.DIFFICULTY_EASY' | translate }}
-          </option>
-          <option value="medium">
-            {{ 'CONTROLS.DIFFICULTY_MEDIUM' | translate }}
-          </option>
-          <option value="hard">
-            {{ 'CONTROLS.DIFFICULTY_HARD' | translate }}
-          </option>
-          <option value="extreme">
-            {{ 'CONTROLS.DIFFICULTY_EXTREME' | translate }}
-          </option>
-        </select>
+        <p-select
+          [(ngModel)]="difficulty"
+          [options]="difficultyOptions"
+          optionLabel="label"
+          optionValue="value"
+          (onChange)="onDifficultySelectChange()"
+          styleClass="w-full"
+        />
       </div>
     </div>
   `,
   styles: [
     `
       .controls {
-        background: #f5f5f5;
+        background: var(--brand-bg-subtle);
         padding: 1.5rem;
         border-radius: 8px;
         margin-bottom: 1.5rem;
@@ -69,8 +60,8 @@ import { Difficulty } from '../../models/city.model';
       }
 
       .control-group {
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
+        background: var(--brand-bg-card);
+        border: 1px solid var(--brand-secondary-light-blue);
         border-radius: 10px;
         padding: 1rem;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -80,32 +71,23 @@ import { Difficulty } from '../../models/city.model';
         display: block;
         font-weight: 600;
         margin-bottom: 0.5rem;
-        color: #333;
+        color: var(--brand-text-primary);
       }
 
       .control-description {
         margin: 0 0 0.5rem 0;
-        color: #555;
+        color: var(--brand-text-secondary);
         font-size: 0.95rem;
       }
 
-      input[type='range'] {
+      :host ::ng-deep .brand-slider {
         width: 100%;
-        margin: 0.5rem 0;
-      }
-
-      select {
-        width: 100%;
-        padding: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 1rem;
-        background: white;
+        margin: 0.75rem 0;
       }
 
       small {
         display: block;
-        color: #666;
+        color: var(--brand-text-secondary);
         margin-top: 0.25rem;
       }
     `,
@@ -118,18 +100,49 @@ export class ControlsComponent {
   selectedCitiesCount = computed(() => this.initialCitiesCount());
   maxCities = computed(() => this.maxCitiesInput());
   difficulty: Difficulty = 'easy';
+  sliderValue = 5;
+
+  difficultyOptions: { label: string; value: Difficulty }[] = [];
 
   citiesCountChange = output<number>();
   difficultyChange = output<Difficulty>();
 
-  onCitiesCountChange(event: Event): void {
-    const value = Number.parseInt((event.target as HTMLInputElement).value);
-    this.citiesCountChange.emit(value);
+  constructor(private translate: TranslateService) {
+    this.sliderValue = this.initialCitiesCount();
+    this.buildDifficultyOptions();
+    this.translate.onLangChange.subscribe(() => this.buildDifficultyOptions());
   }
 
-  onDifficultyChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value as Difficulty;
-    this.difficulty = value;
-    this.difficultyChange.emit(value);
+  private buildDifficultyOptions(): void {
+    this.difficultyOptions = [
+      {
+        label: this.translate.instant('CONTROLS.DIFFICULTY_EASY'),
+        value: 'easy',
+      },
+      {
+        label: this.translate.instant('CONTROLS.DIFFICULTY_MEDIUM'),
+        value: 'medium',
+      },
+      {
+        label: this.translate.instant('CONTROLS.DIFFICULTY_HARD'),
+        value: 'hard',
+      },
+      {
+        label: this.translate.instant('CONTROLS.DIFFICULTY_EXTREME'),
+        value: 'extreme',
+      },
+    ];
+  }
+
+  ngOnChanges(): void {
+    this.sliderValue = this.initialCitiesCount();
+  }
+
+  onSliderChange(): void {
+    this.citiesCountChange.emit(this.sliderValue);
+  }
+
+  onDifficultySelectChange(): void {
+    this.difficultyChange.emit(this.difficulty);
   }
 }

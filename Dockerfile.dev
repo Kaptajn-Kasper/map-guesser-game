@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies at build time (source is volume-mounted at runtime)
+COPY package*.json ./
+RUN npm ci && npm cache clean --force
+
+EXPOSE 4200
+
+# Run ng serve with flags for Docker compatibility:
+#   --host 0.0.0.0       listen on all interfaces for Docker network
+#   --poll 2000          file watching over Docker volume mounts
+#   --allowed-hosts      accept traffic from any hostname (e.g. via Caddy)
+CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--poll", "2000", "--allowed-hosts"]

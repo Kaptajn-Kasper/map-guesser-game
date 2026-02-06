@@ -2,11 +2,13 @@ import { Component, output, input, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, AutoComplete, Button],
   template: `
     <div class="game-panel">
       <div class="streak">
@@ -28,38 +30,34 @@ import { TranslateModule } from '@ngx-translate/core';
       </p>
 
       <div class="guess-form">
-        <input
-          type="text"
-          name="city"
+        <p-autocomplete
           [(ngModel)]="guess"
-          list="city-suggestions"
+          [suggestions]="filteredCities"
+          (completeMethod)="filterCities($event)"
           [placeholder]="'GAME.ENTER_CITY' | translate"
-          (input)="onTextInput($event)"
-          (change)="onTextInput($event)"
-          (keyup.enter)="onSubmit()"
           [disabled]="gameState !== 'playing'"
-          autocomplete="off"
+          (keydown.enter)="onSubmit()"
+          [forceSelection]="false"
+          [dropdown]="false"
+          styleClass="guess-autocomplete"
         />
-        <datalist id="city-suggestions">
-          @for (city of availableCities(); track city) {
-          <option [value]="city"></option>
-          }
-        </datalist>
-        <button
-          (click)="onSubmit()"
+        <p-button
+          [label]="'GAME.SUBMIT_GUESS' | translate"
+          (onClick)="onSubmit()"
           [disabled]="!guess || gameState !== 'playing'"
-        >
-          {{ 'GAME.SUBMIT_GUESS' | translate }}
-        </button>
+          severity="primary"
+        />
       </div>
 
       @if (gameState === 'correct') {
       <div class="feedback correct">
         <h3>✓ {{ 'GAME.CORRECT' | translate }}</h3>
         <p>{{ 'GAME.CORRECT_MESSAGE' | translate : { city: lastGuess } }}</p>
-        <button (click)="onNextCity()">
-          {{ 'GAME.NEXT_CITY' | translate }}
-        </button>
+        <p-button
+          [label]="'GAME.NEXT_CITY' | translate"
+          (onClick)="onNextCity()"
+          severity="success"
+        />
       </div>
       } @if (gameState === 'wrong') {
       <div class="feedback wrong">
@@ -72,9 +70,11 @@ import { TranslateModule } from '@ngx-translate/core';
           <strong>{{ correctAnswer }}</strong>
         </p>
         <p>{{ 'GAME.STREAK_RESET' | translate }}</p>
-        <button (click)="onNextCity()">
-          {{ 'GAME.NEXT_CITY' | translate }}
-        </button>
+        <p-button
+          [label]="'GAME.NEXT_CITY' | translate"
+          (onClick)="onNextCity()"
+          severity="secondary"
+        />
       </div>
       } @if (gameState === 'completed') {
       <div class="feedback celebration">
@@ -88,7 +88,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styles: [
     `
       .game-panel {
-        background: white;
+        background: var(--brand-bg-card);
         padding: 1.5rem;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -101,20 +101,22 @@ import { TranslateModule } from '@ngx-translate/core';
         h2 {
           margin: 0;
           font-size: 1.5rem;
-          color: #333;
+          color: var(--brand-text-primary);
         }
 
         .high-score {
           margin: 0.5rem 0 0 0;
           font-size: 1rem;
-          color: #666;
+          color: var(--brand-text-secondary);
           font-weight: 600;
         }
-        .progress {
-          margin: 0.25rem 0 0 0;
-          font-size: 0.95rem;
-          color: #555;
-        }
+      }
+
+      .progress {
+        margin: 0.25rem 0 1rem 0;
+        font-size: 0.95rem;
+        color: var(--brand-text-secondary);
+        text-align: center;
       }
 
       .guess-form {
@@ -122,41 +124,11 @@ import { TranslateModule } from '@ngx-translate/core';
         gap: 0.5rem;
         margin-bottom: 1rem;
 
-        input {
+        :host ::ng-deep .guess-autocomplete {
           flex: 1;
-          padding: 0.75rem;
-          border: 2px solid #ccc;
-          border-radius: 4px;
-          font-size: 1rem;
 
-          &:focus {
-            outline: none;
-            border-color: #007bff;
-          }
-
-          &:disabled {
-            background: #f5f5f5;
-          }
-        }
-
-        button {
-          padding: 0.75rem 1.5rem;
-          background: #007bff;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          font-size: 1rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background 0.2s;
-
-          &:hover:not(:disabled) {
-            background: #0056b3;
-          }
-
-          &:disabled {
-            background: #ccc;
-            cursor: not-allowed;
+          .p-autocomplete-input {
+            width: 100%;
           }
         }
       }
@@ -165,10 +137,18 @@ import { TranslateModule } from '@ngx-translate/core';
       @media (max-width: 600px) {
         .guess-form {
           flex-direction: column;
-        }
 
-        .guess-form button {
-          width: 100%;
+          :host ::ng-deep .guess-autocomplete {
+            width: 100%;
+          }
+
+          :host ::ng-deep p-button {
+            width: 100%;
+
+            .p-button {
+              width: 100%;
+            }
+          }
         }
       }
 
@@ -186,40 +166,31 @@ import { TranslateModule } from '@ngx-translate/core';
           margin: 0.5rem 0;
         }
 
-        button {
+        :host ::ng-deep p-button {
           margin-top: 1rem;
-          padding: 0.75rem 1.5rem;
-          background: #28a745;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          font-size: 1rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background 0.2s;
-
-          &:hover {
-            background: #218838;
-          }
         }
       }
 
       .correct {
-        background: #d4edda;
-        border: 2px solid #28a745;
-        color: #155724;
+        background: var(--brand-success-bg);
+        border: 2px solid var(--brand-success-border);
+        color: var(--brand-success-text);
       }
 
       .wrong {
-        background: #f8d7da;
-        border: 2px solid #dc3545;
-        color: #721c24;
+        background: var(--brand-error-bg);
+        border: 2px solid var(--brand-error-border);
+        color: var(--brand-error-text);
       }
 
       .celebration {
-        background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
-        border: 3px solid #ffc107;
-        color: #fff;
+        background: linear-gradient(
+          135deg,
+          var(--brand-secondary-soft-teal) 0%,
+          var(--brand-primary-deep) 100%
+        );
+        border: 3px solid var(--brand-accent-teal);
+        color: var(--brand-text-light);
 
         h3 {
           font-size: 2rem;
@@ -246,29 +217,34 @@ export class GameComponent {
   gameState: 'playing' | 'correct' | 'wrong' | 'completed' = 'playing';
   lastGuess = '';
   correctAnswer = '';
+  filteredCities: string[] = [];
 
   guessSubmitted = output<string>();
   nextCityRequested = output<void>();
   restartRequested = output<void>();
 
+  filterCities(event: AutoCompleteCompleteEvent): void {
+    const query = event.query.toLowerCase();
+    this.filteredCities = this.availableCities().filter((city) =>
+      city.toLowerCase().includes(query)
+    );
+  }
+
   onSubmit(): void {
-    if (this.guess.trim()) {
+    if (this.guess && this.guess.trim()) {
       this.guessSubmitted.emit(this.guess.trim());
     }
   }
 
-  onTextInput(event: Event): void {
-    // Ensure value updates when selecting from datalist on Android/Chrome
-    this.guess = (event.target as HTMLInputElement).value || '';
-  }
-
   onNextCity(): void {
     this.guess = '';
+    this.filteredCities = [];
     this.nextCityRequested.emit();
   }
 
   onRestart(): void {
     this.guess = '';
+    this.filteredCities = [];
     this.restartRequested.emit();
   }
 
