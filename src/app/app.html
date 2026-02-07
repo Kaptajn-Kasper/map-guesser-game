@@ -120,7 +120,7 @@
 >
   <div class="results-content">
     <!-- Perfect game -->
-    <div *ngIf="gameService.gameState() === 'completed'">
+    <div *ngIf="gameService.finalScore() === gameService.getCitiesCount()">
       <h1>{{ 'RESULTS.PERFECT_TITLE' | translate }}</h1>
       <p class="results-message">
         {{ 'RESULTS.PERFECT_MESSAGE' | translate: {count:
@@ -130,7 +130,7 @@
 
     <!-- New high score -->
     <div
-      *ngIf="gameService.gameState() !== 'completed' && gameService.isNewHighScore()"
+      *ngIf="gameService.finalScore() !== gameService.getCitiesCount() && gameService.isNewHighScore()"
     >
       <h1>{{ 'RESULTS.NEW_HIGH_SCORE_TITLE' | translate }}</h1>
       <p class="results-message">
@@ -141,7 +141,7 @@
 
     <!-- Regular game over -->
     <div
-      *ngIf="gameService.gameState() !== 'completed' && !gameService.isNewHighScore()"
+      *ngIf="gameService.finalScore() !== gameService.getCitiesCount() && !gameService.isNewHighScore()"
     >
       <h1>{{ 'RESULTS.GAME_OVER_TITLE' | translate }}</h1>
       <p class="results-message">
@@ -171,7 +171,7 @@
 
     <div class="results-actions">
       <ng-container
-        *ngIf="gameService.gameState() !== 'completed'; else perfectActions"
+        *ngIf="gameService.finalScore() !== gameService.getCitiesCount(); else perfectActions"
       >
         <p-button
           [label]="'RESULTS.PLAY_AGAIN' | translate"
