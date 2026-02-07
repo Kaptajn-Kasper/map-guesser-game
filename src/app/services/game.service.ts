@@ -176,8 +176,9 @@ export class GameService {
       }
       this.gameState.set('correct');
     } else {
-      // Wrong answer: set state to 'wrong' and let the App component
+      // Wrong answer: reset streak and let the App component
       // show feedback briefly before ending the game.
+      this.streak.set(0);
       this.gameState.set('wrong');
     }
 
