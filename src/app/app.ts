@@ -83,11 +83,21 @@ export class App implements AfterViewInit {
     });
 
     // Ensure UI is hidden initially when entering playing screen
+    // and sync body background to match each screen's gradient for iOS overscroll
     effect(() => {
       const screen = this.gameService.screenState();
       if (screen === 'playing') {
         this.uiHidden = true;
       }
+      const bgMap: Record<string, string> = {
+        start: '#083841',
+        settings: '#3f1e54',
+        playing: '#083841',
+        finished: '#0a2e37',
+      };
+      const bg = bgMap[screen] || '#083841';
+      document.body.style.background = bg;
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg);
     });
   }
 
