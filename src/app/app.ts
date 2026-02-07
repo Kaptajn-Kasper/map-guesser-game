@@ -31,7 +31,6 @@ export class App implements AfterViewInit {
   @ViewChild(ControlsComponent) controlsComponent?: ControlsComponent;
   @ViewChild(GameComponent) gameComponent?: GameComponent;
 
-  uiHidden = false;
   private wrongEndTimeout: number | undefined;
 
   languageOptions = [
@@ -66,11 +65,6 @@ export class App implements AfterViewInit {
         this.gameService.endGame();
       }
 
-      // On wrong guess: show the overlay with the correct answer.
-      if (state === 'wrong' && this.gameService.screenState() !== 'finished') {
-        this.uiHidden = false;
-      }
-
       if (this.gameComponent) {
         this.gameComponent.updateGameState(
           state,
@@ -82,13 +76,9 @@ export class App implements AfterViewInit {
       }
     });
 
-    // Ensure UI is hidden initially when entering playing screen
-    // and sync body background to match each screen's gradient for iOS overscroll
+    // Sync body background to match each screen's gradient for iOS overscroll
     effect(() => {
       const screen = this.gameService.screenState();
-      if (screen === 'playing') {
-        this.uiHidden = true;
-      }
       const bgMap: Record<string, string> = {
         start: '#083841',
         settings: '#3f1e54',
@@ -133,8 +123,6 @@ export class App implements AfterViewInit {
 
   onNextCityRequested(): void {
     this.gameService.startNewRound();
-    // Ensure the map is visible when the next city loads
-    this.uiHidden = true;
   }
 
   onRestartRequested(): void {
@@ -148,10 +136,6 @@ export class App implements AfterViewInit {
 
   getCurrentLanguage(): string {
     return this.translate.currentLang || 'da';
-  }
-
-  toggleUI(): void {
-    this.uiHidden = !this.uiHidden;
   }
 
   playAgain(): void {

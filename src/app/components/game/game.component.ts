@@ -1,183 +1,183 @@
 import { Component, output, input, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, TranslateModule, Button],
+  imports: [CommonModule, TranslateModule],
   template: `
-    <div class="game-panel">
-      <div class="streak">
-        <h2>
-          {{ 'GAME.CORRECT_SO_FAR' | translate }}:
-          {{
-            (attemptedCount() ? (streak / attemptedCount()) * 100 : 0)
-              | number : '1.0-0'
-          }}%
-        </h2>
-        <p class="high-score">
-          {{ 'GAME.HIGH_SCORE' | translate }}: {{ highScore }}
-        </p>
-      </div>
-      <p class="progress">
-        {{ 'GAME.ATTEMPTED' | translate }}: {{ attemptedCount() }} /
-        {{ totalSelectedCities() }} · {{ 'GAME.REMAINING' | translate }}:
-        {{ remainingCount() }}
-      </p>
-
-      @if (gameState === 'playing') {
-      <div class="choice-grid">
-        @for (option of choiceOptions(); track option) {
-        <button class="choice-btn" (click)="onChoiceSelected(option)">
-          {{ option }}
-        </button>
-        }
-      </div>
-      }
-
-      @if (gameState === 'correct') {
-      <div class="feedback correct">
-        <h3>{{ 'GAME.CORRECT' | translate }}</h3>
-        <p>{{ 'GAME.CORRECT_MESSAGE' | translate : { city: lastGuess } }}</p>
-        <p-button
-          [label]="'GAME.NEXT_CITY' | translate"
-          (onClick)="onNextCity()"
-          severity="success"
-        />
-      </div>
-      } @if (gameState === 'wrong') {
-      <div class="feedback wrong">
-        <h3>{{ 'GAME.WRONG' | translate }}</h3>
-        <p>
-          {{ 'GAME.YOUR_GUESS' | translate }}: <strong>{{ lastGuess }}</strong>
-        </p>
-        <p>
-          {{ 'GAME.CORRECT_ANSWER' | translate }}:
-          <strong>{{ correctAnswer }}</strong>
-        </p>
-        <p>{{ 'GAME.STREAK_RESET' | translate }}</p>
-        <p-button
-          [label]="'GAME.NEXT_CITY' | translate"
-          (onClick)="onNextCity()"
-          severity="secondary"
-        />
-      </div>
-      } @if (gameState === 'completed') {
-      <div class="feedback celebration">
-        <h3>{{ 'GAME.CONGRATULATIONS' | translate }}</h3>
-        <p>{{ 'GAME.ALL_GUESSED' | translate : { count: streak } }}</p>
-        <p class="perfect-score">{{ 'GAME.PERFECT_SCORE' | translate }}</p>
-      </div>
+    <!-- Choice buttons (bottom bar content) -->
+    @if (gameState === 'playing') {
+    <div class="choice-row">
+      @for (option of choiceOptions(); track option) {
+      <button class="choice-btn" (click)="onChoiceSelected(option)">
+        {{ option }}
+      </button>
       }
     </div>
+    }
+
+    <!-- Feedback toast -->
+    @if (gameState === 'correct') {
+    <div class="feedback-toast correct">
+      <span class="feedback-icon">&#10003;</span>
+      <span class="feedback-text">
+        {{ 'GAME.CORRECT' | translate }} &mdash; {{ lastGuess }}
+      </span>
+      <button class="next-btn" (click)="onNextCity()">
+        {{ 'GAME.NEXT_CITY' | translate }} &rarr;
+      </button>
+    </div>
+    }
+    @if (gameState === 'wrong') {
+    <div class="feedback-toast wrong">
+      <span class="feedback-icon">&#10007;</span>
+      <span class="feedback-text">
+        {{ lastGuess }} &mdash; {{ 'GAME.CORRECT_ANSWER' | translate }}:
+        <strong>{{ correctAnswer }}</strong>
+      </span>
+      <button class="next-btn" (click)="onNextCity()">
+        {{ 'GAME.NEXT_CITY' | translate }} &rarr;
+      </button>
+    </div>
+    }
+    @if (gameState === 'completed') {
+    <div class="feedback-toast celebration">
+      <span class="feedback-icon">&#9733;</span>
+      <span class="feedback-text">
+        {{ 'GAME.CONGRATULATIONS' | translate }} &mdash;
+        {{ 'GAME.PERFECT_SCORE' | translate }}
+      </span>
+    </div>
+    }
   `,
   styles: [
     `
-      .game-panel {
-        padding: 1rem;
-      }
-
-      .streak {
-        text-align: center;
-        margin-bottom: 1rem;
-
-        h2 {
-          margin: 0;
-          font-size: 1.5rem;
-          color: var(--brand-text-primary);
-        }
-
-        .high-score {
-          margin: 0.5rem 0 0 0;
-          font-size: 1rem;
-          color: var(--brand-text-secondary);
-          font-weight: 600;
-        }
-      }
-
-      .progress {
-        margin: 0.25rem 0 1rem 0;
-        font-size: 0.95rem;
-        color: var(--brand-text-secondary);
-        text-align: center;
-      }
-
-      .choice-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
+      /* Choice buttons - single row on desktop, 2x2 on mobile */
+      .choice-row {
+        display: flex;
+        gap: 0.5rem;
+        width: 100%;
       }
 
       .choice-btn {
-        padding: 1rem 0.5rem;
-        font-size: 1.1rem;
+        flex: 1;
+        padding: 0.625rem 0.5rem;
+        font-size: 1rem;
         font-weight: 600;
-        border: 2px solid var(--brand-primary);
+        border: 2px solid var(--brand-primary-deep);
         border-radius: 8px;
-        background: var(--brand-bg-card);
+        background: rgba(255, 255, 255, 0.95);
         color: var(--brand-text-primary);
         cursor: pointer;
         transition:
           background 0.15s,
           transform 0.1s;
         text-align: center;
-        min-height: 3.5rem;
+        min-height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
       }
 
-      .choice-btn:hover {
-        background: var(--brand-primary);
-        color: var(--brand-text-light);
+      @media (hover: hover) {
+        .choice-btn:hover {
+          background: var(--brand-primary-deep);
+          color: var(--brand-text-light);
+        }
+      }
+
+      .choice-btn:focus {
+        outline: none;
+      }
+
+      .choice-btn:focus-visible {
+        outline: 2px solid var(--brand-primary-deep);
+        outline-offset: 2px;
       }
 
       .choice-btn:active {
+        background: var(--brand-primary-deep);
+        color: var(--brand-text-light);
         transform: scale(0.97);
       }
 
-      @media (max-width: 400px) {
-        .choice-grid {
+      @media (max-width: 600px) {
+        .choice-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
           gap: 0.5rem;
         }
+
         .choice-btn {
-          font-size: 1rem;
-          padding: 0.75rem 0.5rem;
+          font-size: 0.95rem;
+          padding: 0.5rem 0.375rem;
+          min-height: 44px;
         }
       }
 
-      .feedback {
-        padding: 1rem;
-        border-radius: 4px;
+      /* Feedback toast - inline in bottom bar */
+      .feedback-toast {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
+
+      .feedback-icon {
+        font-size: 1.25rem;
+        flex-shrink: 0;
+        width: 1.5rem;
         text-align: center;
+      }
 
-        h3 {
-          margin: 0 0 0.5rem 0;
-          font-size: 1.5rem;
-        }
+      .feedback-text {
+        flex: 1;
+        min-width: 0;
+      }
 
-        p {
-          margin: 0.5rem 0;
-        }
+      .next-btn {
+        flex-shrink: 0;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        white-space: nowrap;
+        min-height: 36px;
+        transition: opacity 0.15s;
+      }
 
-        :host ::ng-deep p-button {
-          margin-top: 1rem;
-        }
+      .next-btn:hover {
+        opacity: 0.85;
       }
 
       .correct {
         background: var(--brand-success-bg);
-        border: 2px solid var(--brand-success-border);
+        border: 1px solid var(--brand-success-border);
         color: var(--brand-success-text);
+
+        .next-btn {
+          background: var(--brand-success-border);
+          color: var(--brand-text-light);
+        }
       }
 
       .wrong {
         background: var(--brand-error-bg);
-        border: 2px solid var(--brand-error-border);
+        border: 1px solid var(--brand-error-border);
         color: var(--brand-error-text);
+
+        .next-btn {
+          background: var(--brand-error-border);
+          color: var(--brand-text-light);
+        }
       }
 
       .celebration {
@@ -186,18 +186,8 @@ import { Button } from 'primeng/button';
           var(--brand-secondary-soft-teal) 0%,
           var(--brand-primary-deep) 100%
         );
-        border: 3px solid var(--brand-accent-teal);
+        border: 1px solid var(--brand-accent-teal);
         color: var(--brand-text-light);
-
-        h3 {
-          font-size: 2rem;
-        }
-
-        .perfect-score {
-          font-size: 1.2rem;
-          font-weight: bold;
-          margin: 1rem 0;
-        }
       }
     `,
   ],
