@@ -70,6 +70,7 @@
 <div
   class="screen playing-screen"
   *ngIf="gameService.screenState() === 'playing'"
+  (click)="onPlayingScreenTap()"
 >
   <app-map [city]="gameService.currentCity()" [style]="gameService.style()" />
 
@@ -84,6 +85,11 @@
     <button class="top-bar-end" (click)="gameService.endGame()">
       {{ 'GAME.END_GAME' | translate }}
     </button>
+  </div>
+
+  <!-- Thumbs-down overlay for wrong answers -->
+  <div class="wrong-overlay" *ngIf="showThumbsDown">
+    <span class="wrong-overlay-emoji">&#x1F44E;</span>
   </div>
 
   <!-- Bottom bar: choice buttons / feedback -->

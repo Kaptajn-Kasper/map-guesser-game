@@ -25,9 +25,6 @@ import { TranslateModule } from '@ngx-translate/core';
       <span class="feedback-text">
         {{ 'GAME.CORRECT' | translate }} &mdash; {{ lastGuess }}
       </span>
-      <button class="next-btn" (click)="onNextCity()">
-        {{ 'GAME.NEXT_CITY' | translate }} &rarr;
-      </button>
     </div>
     }
     @if (gameState === 'wrong') {
@@ -37,9 +34,6 @@ import { TranslateModule } from '@ngx-translate/core';
         {{ lastGuess }} &mdash; {{ 'GAME.CORRECT_ANSWER' | translate }}:
         <strong>{{ correctAnswer }}</strong>
       </span>
-      <button class="next-btn" (click)="onNextCity()">
-        {{ 'GAME.NEXT_CITY' | translate }} &rarr;
-      </button>
     </div>
     }
     @if (gameState === 'completed') {
@@ -141,43 +135,16 @@ import { TranslateModule } from '@ngx-translate/core';
         min-width: 0;
       }
 
-      .next-btn {
-        flex-shrink: 0;
-        padding: 0.375rem 0.75rem;
-        font-size: 0.85rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        white-space: nowrap;
-        min-height: 36px;
-        transition: opacity 0.15s;
-      }
-
-      .next-btn:hover {
-        opacity: 0.85;
-      }
-
       .correct {
         background: var(--brand-success-bg);
         border: 1px solid var(--brand-success-border);
         color: var(--brand-success-text);
-
-        .next-btn {
-          background: var(--brand-success-border);
-          color: var(--brand-text-light);
-        }
       }
 
       .wrong {
         background: var(--brand-error-bg);
         border: 1px solid var(--brand-error-border);
         color: var(--brand-error-text);
-
-        .next-btn {
-          background: var(--brand-error-border);
-          color: var(--brand-text-light);
-        }
       }
 
       .celebration {
