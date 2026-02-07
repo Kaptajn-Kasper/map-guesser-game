@@ -50,9 +50,10 @@
     <p>{{ 'SETTINGS.CHOOSE_SETTINGS' | translate }}</p>
 
     <app-controls
-      [initialCitiesCount]="gameService.getCitiesCount()"
-      [maxCitiesInput]="gameService.getTotalCityCount()"
-      (citiesCountChange)="onCitiesCountChange($event)"
+      [initialRoundCount]="gameService.roundCount()"
+      [initialDifficulty]="gameService.difficulty()"
+      [poolSize]="gameService.getPoolSize()"
+      (roundCountChange)="onRoundCountChange($event)"
       (difficultyChange)="onDifficultyChange($event)"
     />
 
@@ -77,7 +78,7 @@
   <!-- Top bar: progress + streak + end game -->
   <div class="playing-top-bar">
     <span class="top-bar-progress">
-      {{ gameService.getAttemptedCount() }} / {{ gameService.getCitiesCount() }}
+      {{ gameService.getAttemptedCount() }} / {{ gameService.getRoundCount() }}
     </span>
     <span class="top-bar-streak">
       &#x1f525; {{ gameService.streak() }}
@@ -96,7 +97,7 @@
   <div class="playing-bottom-bar">
     <app-game
       [choiceOptions]="gameService.choiceOptions()"
-      [totalSelectedCities]="gameService.getCitiesCount()"
+      [totalSelectedCities]="gameService.getRoundCount()"
       [attemptedCount]="gameService.getAttemptedCount()"
       [remainingCount]="gameService.getRemainingCount()"
       (guessSubmitted)="onGuessSubmitted($event)"
@@ -113,7 +114,7 @@
 >
   <div class="results-content">
     <!-- Perfect game -->
-    <div *ngIf="gameService.finalScore() === gameService.getCitiesCount()">
+    <div *ngIf="gameService.finalScore() === gameService.getRoundCount()">
       <h1>{{ 'RESULTS.PERFECT_TITLE' | translate }}</h1>
       <p class="results-message">
         {{ 'RESULTS.PERFECT_MESSAGE' | translate: {count:
@@ -123,7 +124,7 @@
 
     <!-- New high score -->
     <div
-      *ngIf="gameService.finalScore() !== gameService.getCitiesCount() && gameService.isNewHighScore()"
+      *ngIf="gameService.finalScore() !== gameService.getRoundCount() && gameService.isNewHighScore()"
     >
       <h1>{{ 'RESULTS.NEW_HIGH_SCORE_TITLE' | translate }}</h1>
       <p class="results-message">
@@ -134,7 +135,7 @@
 
     <!-- Regular game over -->
     <div
-      *ngIf="gameService.finalScore() !== gameService.getCitiesCount() && !gameService.isNewHighScore()"
+      *ngIf="gameService.finalScore() !== gameService.getRoundCount() && !gameService.isNewHighScore()"
     >
       <h1>{{ 'RESULTS.GAME_OVER_TITLE' | translate }}</h1>
       <p class="results-message">
@@ -147,16 +148,16 @@
       <div class="score-item">
         <span class="score-label">{{ 'RESULTS.FINAL_SCORE' | translate }}</span>
         <span class="score-value"
-          >{{ gameService.finalScore() }} / {{ gameService.getCitiesCount() }}
-          ({{ ((gameService.finalScore() / gameService.getCitiesCount()) * 100)
+          >{{ gameService.finalScore() }} / {{ gameService.getRoundCount() }}
+          ({{ ((gameService.finalScore() / gameService.getRoundCount()) * 100)
           | number:'1.0-0' }}%)</span
         >
       </div>
       <div class="score-item">
         <span class="score-label">{{ 'RESULTS.HIGH_SCORE' | translate }}</span>
         <span class="score-value"
-          >{{ gameService.highScore() }} / {{ gameService.getCitiesCount() }}
-          ({{ ((gameService.highScore() / gameService.getCitiesCount()) * 100) |
+          >{{ gameService.highScore() }} / {{ gameService.getRoundCount() }}
+          ({{ ((gameService.highScore() / gameService.getRoundCount()) * 100) |
           number:'1.0-0' }}%)</span
         >
       </div>
@@ -164,7 +165,7 @@
 
     <div class="results-actions">
       <ng-container
-        *ngIf="gameService.finalScore() !== gameService.getCitiesCount(); else perfectActions"
+        *ngIf="gameService.finalScore() !== gameService.getRoundCount(); else perfectActions"
       >
         <p-button
           [label]="'RESULTS.PLAY_AGAIN' | translate"

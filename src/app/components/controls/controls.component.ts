@@ -1,38 +1,17 @@
-import { Component, output, input, computed } from '@angular/core';
+import { Component, output, input, computed, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Slider } from 'primeng/slider';
 import { Select } from 'primeng/select';
-import { Difficulty } from '../../models/city.model';
+import { Difficulty, RoundCount } from '../../models/city.model';
 
 @Component({
   selector: 'app-controls',
   standalone: true,
-  imports: [FormsModule, TranslateModule, Slider, Select],
+  imports: [FormsModule, TranslateModule, Select],
   template: `
     <div class="controls">
       <div class="control-group">
-        <label for="cities-count">
-          {{ 'CONTROLS.CITIES_COUNT' | translate }}: {{ sliderValue }}
-        </label>
-        <p class="control-description">
-          {{ 'CONTROLS.CITIES_COUNT_DESCRIPTION' | translate }}
-        </p>
-        <p-slider
-          [(ngModel)]="sliderValue"
-          [min]="1"
-          [max]="maxCities()"
-          [step]="1"
-          (onChange)="onSliderChange()"
-          styleClass="brand-slider"
-        />
-        <small
-          >{{ 'CONTROLS.TOTAL_CITIES' | translate }}: {{ maxCities() }}</small
-        >
-      </div>
-
-      <div class="control-group">
-        <label for="difficulty">{{ 'CONTROLS.DIFFICULTY' | translate }}:</label>
+        <label>{{ 'CONTROLS.DIFFICULTY' | translate }}:</label>
         <p class="control-description">
           {{ 'SETTINGS.DIFFICULTY_EXPLANATION' | translate }}
         </p>
@@ -44,6 +23,22 @@ import { Difficulty } from '../../models/city.model';
           (onChange)="onDifficultySelectChange()"
           styleClass="w-full"
         />
+      </div>
+
+      <div class="control-group">
+        <label>{{ 'CONTROLS.ROUND_COUNT' | translate }}:</label>
+        <p class="control-description">
+          {{ 'CONTROLS.ROUND_COUNT_DESCRIPTION' | translate }}
+        </p>
+        <p-select
+          [(ngModel)]="selectedRoundCount"
+          [options]="roundCountOptionsComputed()"
+          optionLabel="label"
+          optionValue="value"
+          (onChange)="onRoundCountSelectChange()"
+          styleClass="w-full"
+        />
+        <small>{{ 'CONTROLS.POOL_SIZE' | translate }}: {{ poolSize() }}</small>
       </div>
     </div>
   `,
@@ -80,37 +75,47 @@ import { Difficulty } from '../../models/city.model';
         font-size: 0.95rem;
       }
 
-      :host ::ng-deep .brand-slider {
-        width: 100%;
-        margin: 0.75rem 0;
-      }
-
       small {
         display: block;
         color: var(--brand-text-secondary);
-        margin-top: 0.25rem;
+        margin-top: 0.5rem;
       }
     `,
   ],
 })
 export class ControlsComponent {
-  initialCitiesCount = input<number>(5);
-  maxCitiesInput = input<number>(0);
+  initialRoundCount = input<RoundCount>(10);
+  initialDifficulty = input<Difficulty>('easy');
+  poolSize = input<number>(0);
 
-  selectedCitiesCount = computed(() => this.initialCitiesCount());
-  maxCities = computed(() => this.maxCitiesInput());
+  difficultyChange = output<Difficulty>();
+  roundCountChange = output<RoundCount>();
+
   difficulty: Difficulty = 'easy';
-  sliderValue = 5;
+  selectedRoundCount: RoundCount = 10;
 
   difficultyOptions: { label: string; value: Difficulty }[] = [];
 
-  citiesCountChange = output<number>();
-  difficultyChange = output<Difficulty>();
+  roundCountOptionsComputed = computed(() => {
+    const pool = this.poolSize();
+    return ([5, 10, 15] as RoundCount[])
+      .filter((n) => n <= pool || n === 5)
+      .map((n) => ({
+        label: `${Math.min(n, pool)}`,
+        value: n,
+      }));
+  });
 
   constructor(private translate: TranslateService) {
-    this.sliderValue = this.initialCitiesCount();
+    this.difficulty = this.initialDifficulty();
+    this.selectedRoundCount = this.initialRoundCount();
     this.buildDifficultyOptions();
     this.translate.onLangChange.subscribe(() => this.buildDifficultyOptions());
+
+    effect(() => {
+      this.difficulty = this.initialDifficulty();
+      this.selectedRoundCount = this.initialRoundCount();
+    });
   }
 
   private buildDifficultyOptions(): void {
@@ -127,22 +132,14 @@ export class ControlsComponent {
         label: this.translate.instant('CONTROLS.DIFFICULTY_HARD'),
         value: 'hard',
       },
-      {
-        label: this.translate.instant('CONTROLS.DIFFICULTY_EXTREME'),
-        value: 'extreme',
-      },
     ];
-  }
-
-  ngOnChanges(): void {
-    this.sliderValue = this.initialCitiesCount();
-  }
-
-  onSliderChange(): void {
-    this.citiesCountChange.emit(this.sliderValue);
   }
 
   onDifficultySelectChange(): void {
     this.difficultyChange.emit(this.difficulty);
+  }
+
+  onRoundCountSelectChange(): void {
+    this.roundCountChange.emit(this.selectedRoundCount);
   }
 }

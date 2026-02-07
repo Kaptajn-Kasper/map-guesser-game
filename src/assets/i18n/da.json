@@ -8,7 +8,7 @@
     "DESCRIPTION": "Test din viden om danske byer ved at identificere dem ud fra deres vejnet og vandveje.",
     "START_BUTTON": "Start spil",
     "HOW_TO_PLAY": "Sådan spiller du",
-    "STEP1": "Vælg din sværhedsgrad og antal byer",
+    "STEP1": "Vælg din sværhedsgrad og antal runder",
     "STEP2": "Studér kortet der kun viser veje og vand",
     "STEP3": "Tryk på det rigtige bynavn blandt de fire valgmuligheder",
     "STEP4": "Byg din streak op for en høj score!"
@@ -16,19 +16,17 @@
   "SETTINGS": {
     "TITLE": "Spilindstillinger",
     "CHOOSE_SETTINGS": "Vælg dit udfordringsniveau",
-    "CITIES_COUNT_EXPLANATION": "Vælg hvor mange af de største byer der skal med. Lavere værdier inkluderer færre (men større) byer. Højere værdier inkluderer flere byer.",
-    "DIFFICULTY_EXPLANATION": "Sværhedsgraden styrer hvor meget af kortet der er synligt. Lettere niveauer viser flere veje, mens sværere niveauer viser færre detaljer.",
+    "DIFFICULTY_EXPLANATION": "Sværhedsgrad bestemmer hvilke byer du får. Let = store byer, Mellem = mellemstore byer, Svær = små byer.",
     "START_PLAYING": "Start spillet →"
   },
   "CONTROLS": {
-    "CITIES_COUNT": "Antal byer",
-    "CITIES_COUNT_DESCRIPTION": "Vælg hvor mange af de største byer der skal med.",
-    "TOTAL_CITIES": "Samlede antal byer",
+    "ROUND_COUNT": "Antal runder",
+    "ROUND_COUNT_DESCRIPTION": "Hvor mange byer du skal gætte per spil.",
+    "POOL_SIZE": "Byer i puljen",
     "DIFFICULTY": "Sværhedsgrad",
-    "DIFFICULTY_EASY": "Let (Alle veje + vand)",
-    "DIFFICULTY_MEDIUM": "Mellem (Store veje + vand)",
-    "DIFFICULTY_HARD": "Svær (Primære veje + vand)",
-    "DIFFICULTY_EXTREME": "Ekstremt (Kun vand)"
+    "DIFFICULTY_EASY": "Let (Store byer)",
+    "DIFFICULTY_MEDIUM": "Mellem (Mellemstore byer)",
+    "DIFFICULTY_HARD": "Svær (Små byer)"
   },
   "GAME": {
     "CURRENT_STREAK": "Nuværende streak",

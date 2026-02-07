@@ -8,7 +8,7 @@
     "DESCRIPTION": "Test your knowledge of Danish cities by identifying them from their road networks and waterways.",
     "START_BUTTON": "Start Game",
     "HOW_TO_PLAY": "How to Play",
-    "STEP1": "Choose your difficulty and number of cities",
+    "STEP1": "Choose your difficulty and number of rounds",
     "STEP2": "Study the map showing only roads and water",
     "STEP3": "Tap the correct city name from the four choices",
     "STEP4": "Build up your streak for a high score!"
@@ -16,19 +16,17 @@
   "SETTINGS": {
     "TITLE": "Game Settings",
     "CHOOSE_SETTINGS": "Choose your challenge level",
-    "CITIES_COUNT_EXPLANATION": "Select how many of the largest cities to include. Lower values include fewer (but larger) cities. Higher values include more cities.",
-    "DIFFICULTY_EXPLANATION": "Difficulty controls how much of the map is visible. Easier modes show more roads, while harder modes show less detail.",
+    "DIFFICULTY_EXPLANATION": "Difficulty controls which cities you get. Easy = large cities, Medium = mid-size cities, Hard = small cities.",
     "START_PLAYING": "Start Playing →"
   },
   "CONTROLS": {
-    "CITIES_COUNT": "Number of cities",
-    "CITIES_COUNT_DESCRIPTION": "Select how many of the largest cities to include.",
-    "TOTAL_CITIES": "Total cities available",
+    "ROUND_COUNT": "Number of rounds",
+    "ROUND_COUNT_DESCRIPTION": "How many cities to guess per game.",
+    "POOL_SIZE": "Cities in pool",
     "DIFFICULTY": "Difficulty",
-    "DIFFICULTY_EASY": "Easy (All roads + water)",
-    "DIFFICULTY_MEDIUM": "Medium (Major roads + water)",
-    "DIFFICULTY_HARD": "Hard (Primary roads + water)",
-    "DIFFICULTY_EXTREME": "Extreme (Water only)"
+    "DIFFICULTY_EASY": "Easy (Large cities)",
+    "DIFFICULTY_MEDIUM": "Medium (Mid-size cities)",
+    "DIFFICULTY_HARD": "Hard (Small cities)"
   },
   "GAME": {
     "CURRENT_STREAK": "Current Streak",

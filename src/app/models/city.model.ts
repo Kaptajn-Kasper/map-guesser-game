@@ -5,4 +5,6 @@ export interface City {
   lon: number;
 }
 
-export type Difficulty = 'easy' | 'medium' | 'hard' | 'extreme';
+export type Difficulty = 'easy' | 'medium' | 'hard';
+
+export type RoundCount = 5 | 10 | 15;

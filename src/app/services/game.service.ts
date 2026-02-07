@@ -1,25 +1,29 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { City, Difficulty } from '../models/city.model';
+import { City, Difficulty, RoundCount } from '../models/city.model';
 import { environment } from '../../environments/environment';
 import citiesData from '../../assets/data/cities.dk.json';
 import easyStyle from '../../assets/styles/easy.json';
-import mediumStyle from '../../assets/styles/medium.json';
-import hardStyle from '../../assets/styles/hard.json';
-import extremeStyle from '../../assets/styles/extreme.json';
+
+const DIFFICULTY_TIERS: Record<Difficulty, { min: number; max: number }> = {
+  easy: { min: 40000, max: Infinity },
+  medium: { min: 20000, max: 40000 },
+  hard: { min: 0, max: 20000 },
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
   private readonly cities: City[] = citiesData as City[];
-  private readonly STORAGE_KEY = 'map-guesser-cities-count';
+  private readonly ROUND_COUNT_KEY = 'map-guesser-round-count';
+  private readonly DIFFICULTY_KEY = 'map-guesser-difficulty';
   private readonly HIGH_SCORE_PREFIX = 'map-guesser-high-score';
 
   // Signals for reactive state
   screenState = signal<'start' | 'settings' | 'playing' | 'finished'>('start');
   currentCity = signal<City | null>(null);
-  citiesToInclude = signal<number>(this.loadCitiesCount());
-  difficulty = signal<Difficulty>('easy');
+  roundCount = signal<RoundCount>(this.loadRoundCount());
+  difficulty = signal<Difficulty>(this.loadDifficulty());
   streak = signal<number>(0);
   highScore = signal<number>(0);
   gameState = signal<'playing' | 'correct' | 'wrong' | 'completed'>('playing');
@@ -30,15 +34,9 @@ export class GameService {
 
   private usedCities: Set<string> = new Set();
 
-  // Computed signal for style that updates when difficulty changes
+  // Fixed style — always use easy (all roads + water)
   style = computed(() => {
-    const styles = {
-      easy: easyStyle,
-      medium: mediumStyle,
-      hard: hardStyle,
-      extreme: extremeStyle,
-    };
-    const style = JSON.parse(JSON.stringify(styles[this.difficulty()]));
+    const style = JSON.parse(JSON.stringify(easyStyle));
 
     // Inject API key into style
     const apiKey = environment.mapTilerKey;
@@ -65,20 +63,30 @@ export class GameService {
     this.loadHighScore();
   }
 
-  private loadCitiesCount(): number {
-    const stored = localStorage.getItem(this.STORAGE_KEY);
-    // Default to 5 cities if not set
-    return stored ? Number.parseInt(stored, 10) : 5;
+  private loadRoundCount(): RoundCount {
+    const stored = localStorage.getItem(this.ROUND_COUNT_KEY);
+    const parsed = stored ? Number.parseInt(stored, 10) : 10;
+    return [5, 10, 15].includes(parsed) ? (parsed as RoundCount) : 10;
   }
 
-  private saveCitiesCount(count: number): void {
-    localStorage.setItem(this.STORAGE_KEY, count.toString());
+  private saveRoundCount(count: RoundCount): void {
+    localStorage.setItem(this.ROUND_COUNT_KEY, count.toString());
+  }
+
+  private loadDifficulty(): Difficulty {
+    const stored = localStorage.getItem(this.DIFFICULTY_KEY);
+    if (stored === 'easy' || stored === 'medium' || stored === 'hard') {
+      return stored;
+    }
+    return 'easy';
+  }
+
+  private saveDifficulty(difficulty: Difficulty): void {
+    localStorage.setItem(this.DIFFICULTY_KEY, difficulty);
   }
 
   private getHighScoreKey(): string {
-    return `${
-      this.HIGH_SCORE_PREFIX
-    }-${this.difficulty()}-${this.citiesToInclude()}`;
+    return `${this.HIGH_SCORE_PREFIX}-${this.difficulty()}-${this.getRoundCount()}`;
   }
 
   private loadHighScore(): void {
@@ -91,33 +99,49 @@ export class GameService {
     this.highScore.set(score);
   }
 
-  setCitiesCount(count: number): void {
-    // Clamp to valid range
-    const max = this.cities.length;
-    const clamped = Math.max(1, Math.min(count, max));
-    this.citiesToInclude.set(clamped);
-    this.saveCitiesCount(clamped);
+  getPoolForDifficulty(): City[] {
+    const tier = DIFFICULTY_TIERS[this.difficulty()];
+    return this.sortedCities.filter(
+      (c) => c.population >= tier.min && c.population < tier.max
+    );
+  }
+
+  getPoolSize(): number {
+    return this.getPoolForDifficulty().length;
+  }
+
+  getRoundCount(): number {
+    return Math.min(this.roundCount(), this.getPoolSize());
+  }
+
+  setRoundCount(count: RoundCount): void {
+    this.roundCount.set(count);
+    this.saveRoundCount(count);
     this.loadHighScore();
     this.usedCities.clear();
     this.streak.set(0);
-    this.startNewRound();
   }
 
   setDifficulty(difficulty: Difficulty): void {
     this.difficulty.set(difficulty);
+    this.saveDifficulty(difficulty);
     this.loadHighScore();
     this.usedCities.clear();
     this.streak.set(0);
   }
 
   startNewRound(): void {
-    const topN = this.sortedCities.slice(0, this.citiesToInclude());
-    const eligibleCities = topN.filter(
+    const pool = this.getPoolForDifficulty();
+    const effectiveRounds = Math.min(this.roundCount(), pool.length);
+    const eligibleCities = pool.filter(
       (city) => !this.usedCities.has(city.name)
     );
 
-    if (eligibleCities.length === 0) {
-      // Completed the run (attempted all selected cities)
+    if (
+      eligibleCities.length === 0 ||
+      this.usedCities.size >= effectiveRounds
+    ) {
+      // Completed the run (attempted all selected rounds)
       this.gameState.set('completed');
       return;
     }
@@ -133,8 +157,8 @@ export class GameService {
     const correctName = this.currentCity()?.name;
     if (!correctName) return;
 
-    const topN = this.sortedCities.slice(0, this.citiesToInclude());
-    let wrongPool = topN
+    const pool = this.getPoolForDifficulty();
+    let wrongPool = pool
       .filter((c) => c.name !== correctName)
       .map((c) => c.name);
 
@@ -194,10 +218,6 @@ export class GameService {
       .trim();
   }
 
-  getCitiesCount(): number {
-    return this.citiesToInclude();
-  }
-
   getTotalCityCount(): number {
     return this.cities.length;
   }
@@ -207,7 +227,7 @@ export class GameService {
   }
 
   getRemainingCount(): number {
-    const remaining = this.citiesToInclude() - this.usedCities.size;
+    const remaining = this.getRoundCount() - this.usedCities.size;
     return remaining > 0 ? remaining : 0;
   }
 

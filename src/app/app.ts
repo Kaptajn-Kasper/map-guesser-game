@@ -9,7 +9,7 @@ import { GameService } from './services/game.service';
 import { MapComponent } from './components/map/map.component';
 import { ControlsComponent } from './components/controls/controls.component';
 import { GameComponent } from './components/game/game.component';
-import { Difficulty } from './models/city.model';
+import { Difficulty, RoundCount } from './models/city.model';
 import confetti from 'canvas-confetti';
 
 @Component({
@@ -138,8 +138,8 @@ export class App implements AfterViewInit, OnDestroy {
     }
   }
 
-  onCitiesCountChange(count: number): void {
-    this.gameService.setCitiesCount(count);
+  onRoundCountChange(count: RoundCount): void {
+    this.gameService.setRoundCount(count);
   }
 
   onDifficultyChange(difficulty: Difficulty): void {
