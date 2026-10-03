@@ -1,0 +1,19 @@
+# Build and deploy via the shared pipeline in the infrastructure repo:
+# push to main → dev → preprod → prod (after approval on the "prod" environment).
+# Run manually from another branch to deploy that branch to dev only.
+name: pipeline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  pipeline:
+    uses: Kaptajn-Kasper/infrastructure/.github/workflows/app-pipeline.yml@main
+    with:
+      app: map-guesser-game
