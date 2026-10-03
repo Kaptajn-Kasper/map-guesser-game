@@ -95,6 +95,14 @@ and aim for the longest streak.
 npm install
 ```
 
+### Configure the MapTiler key
+
+```bash
+cp public/config.example.js public/config.js   # then add your key
+```
+
+See [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md).
+
 ### Run locally
 
 ```bash
@@ -125,3 +133,9 @@ Open:
 - Shareable streak links
 
 ---
+
+## 🚢 Deployment
+
+Pushes to `main` are built and deployed to dev and preprod automatically. Prod
+deploys after approval. See [CLAUDE.md](CLAUDE.md) and the
+[infrastructure repo](https://github.com/Kaptajn-Kasper/infrastructure).

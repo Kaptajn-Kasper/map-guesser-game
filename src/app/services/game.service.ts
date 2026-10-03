@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { City, Difficulty, RoundCount } from '../models/city.model';
-import { environment } from '../../environments/environment';
+import { appConfig } from '../app-config';
 import citiesData from '../../assets/data/cities.dk.json';
 import easyStyle from '../../assets/styles/easy.json';
 
@@ -39,7 +39,7 @@ export class GameService {
     const style = JSON.parse(JSON.stringify(easyStyle));
 
     // Inject API key into style
-    const apiKey = environment.mapTilerKey;
+    const apiKey = appConfig.mapTilerKey;
     if (style.sources?.openmaptiles?.url) {
       style.sources.openmaptiles.url = style.sources.openmaptiles.url.replace(
         '{MAPTILER_KEY}',
