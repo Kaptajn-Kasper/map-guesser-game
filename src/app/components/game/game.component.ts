@@ -60,10 +60,10 @@ import { TranslateModule } from '@ngx-translate/core';
         padding: 0.625rem 0.5rem;
         font-size: 1rem;
         font-weight: 600;
-        border: 2px solid var(--brand-primary-deep);
+        border: 2px solid var(--kk-color-brand-purple-700);
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.95);
-        color: var(--brand-text-primary);
+        color: var(--kk-color-on-surface);
         cursor: pointer;
         transition:
           background 0.15s,
@@ -77,8 +77,8 @@ import { TranslateModule } from '@ngx-translate/core';
 
       @media (hover: hover) {
         .choice-btn:hover {
-          background: var(--brand-primary-deep);
-          color: var(--brand-text-light);
+          background: var(--kk-color-brand-purple-700);
+          color: var(--kk-color-brand-white);
         }
       }
 
@@ -87,13 +87,13 @@ import { TranslateModule } from '@ngx-translate/core';
       }
 
       .choice-btn:focus-visible {
-        outline: 2px solid var(--brand-primary-deep);
+        outline: 2px solid var(--kk-color-brand-purple-700);
         outline-offset: 2px;
       }
 
       .choice-btn:active {
-        background: var(--brand-primary-deep);
-        color: var(--brand-text-light);
+        background: var(--kk-color-brand-purple-700);
+        color: var(--kk-color-brand-white);
         transform: scale(0.97);
       }
 
@@ -136,25 +136,25 @@ import { TranslateModule } from '@ngx-translate/core';
       }
 
       .correct {
-        background: var(--brand-success-bg);
-        border: 1px solid var(--brand-success-border);
-        color: var(--brand-success-text);
+        background: var(--kk-color-brand-slate-100);
+        border: 1px solid var(--kk-color-brand-teal-700);
+        color: var(--kk-color-brand-teal-900);
       }
 
       .wrong {
-        background: var(--brand-error-bg);
-        border: 1px solid var(--brand-error-border);
-        color: var(--brand-error-text);
+        background: var(--kk-color-error-container);
+        border: 1px solid var(--kk-color-error);
+        color: var(--kk-color-on-error-container);
       }
 
       .celebration {
         background: linear-gradient(
           135deg,
-          var(--brand-secondary-soft-teal) 0%,
-          var(--brand-primary-deep) 100%
+          var(--kk-color-brand-teal-200) 0%,
+          var(--kk-color-brand-purple-700) 100%
         );
-        border: 1px solid var(--brand-accent-teal);
-        color: var(--brand-text-light);
+        border: 1px solid var(--kk-color-on-primary-container);
+        color: var(--kk-color-brand-white);
       }
     `,
   ],

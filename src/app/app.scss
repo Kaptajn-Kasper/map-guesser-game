@@ -24,7 +24,7 @@
 .start-screen {
   position: relative;
   background: linear-gradient(135deg, #083841, #0e6575);
-  color: var(--brand-text-light);
+  color: var(--kk-color-brand-white);
 
   .start-content {
     max-width: 600px;
@@ -88,7 +88,7 @@
 
   .settings-content {
     max-width: 600px;
-    background: var(--brand-bg-card);
+    background: var(--kk-color-surface-container-lowest);
     padding: 3rem;
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -96,7 +96,7 @@
 
     h1 {
       text-align: center;
-      color: var(--brand-text-primary);
+      color: var(--kk-color-on-surface);
       margin-top: 0;
       margin-bottom: 0.5rem;
       font-size: 2rem;
@@ -104,7 +104,7 @@
 
     > p {
       text-align: center;
-      color: var(--brand-text-secondary);
+      color: var(--kk-color-brand-slate-700);
       margin-bottom: 2rem;
     }
 
@@ -115,21 +115,21 @@
       margin-bottom: 1.5rem;
 
       .info-box {
-        background: var(--brand-bg-primary);
+        background: var(--kk-color-surface);
         padding: 1rem;
         border-radius: 8px;
-        border-left: 4px solid var(--brand-primary-deep);
+        border-left: 4px solid var(--kk-color-brand-purple-700);
 
         strong {
           display: block;
-          color: var(--brand-primary-deep);
+          color: var(--kk-color-brand-purple-700);
           margin-bottom: 0.5rem;
           font-size: 0.95rem;
         }
 
         p {
           margin: 0;
-          color: var(--brand-text-secondary);
+          color: var(--kk-color-brand-slate-700);
           font-size: 0.9rem;
           line-height: 1.5;
         }
@@ -173,7 +173,7 @@
     padding-right: calc(1rem + env(safe-area-inset-right));
     background: rgba(8, 56, 65, 0.7);
     backdrop-filter: blur(8px);
-    color: var(--brand-text-light);
+    color: var(--kk-color-brand-white);
     font-size: 0.95rem;
     font-weight: 600;
 
@@ -199,7 +199,7 @@
       border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 6px;
       background: rgba(255, 255, 255, 0.1);
-      color: var(--brand-text-light);
+      color: var(--kk-color-brand-white);
       cursor: pointer;
       transition: background 0.15s;
       min-height: 32px;
@@ -254,7 +254,7 @@
 
   .results-content {
     max-width: 600px;
-    background: var(--brand-bg-card);
+    background: var(--kk-color-surface-container-lowest);
     padding: 3rem;
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -265,12 +265,12 @@
       margin-top: 0;
       margin-bottom: 1rem;
       font-size: 2.5rem;
-      color: var(--brand-text-primary);
+      color: var(--kk-color-on-surface);
     }
 
     .results-message {
       font-size: 1.2rem;
-      color: var(--brand-text-secondary);
+      color: var(--kk-color-brand-slate-700);
       margin-bottom: 2rem;
     }
 
@@ -279,7 +279,7 @@
       justify-content: space-around;
       margin-bottom: 2rem;
       padding: 1.5rem;
-      background: var(--brand-bg-primary);
+      background: var(--kk-color-surface);
       border-radius: 8px;
 
       .score-item {
@@ -289,7 +289,7 @@
 
         .score-label {
           font-size: 0.9rem;
-          color: var(--brand-text-secondary);
+          color: var(--kk-color-brand-slate-700);
           text-transform: uppercase;
           font-weight: 600;
         }
@@ -297,7 +297,7 @@
         .score-value {
           font-size: 2.5rem;
           font-weight: 700;
-          color: var(--brand-primary-deep);
+          color: var(--kk-color-brand-purple-700);
         }
       }
     }

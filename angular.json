@@ -28,6 +28,16 @@
               },
               {
                 "glob": "**/*",
+                "input": "node_modules/@kaptajn-kasper/brand/dist/icons",
+                "output": "/"
+              },
+              {
+                "glob": "*.svg",
+                "input": "node_modules/@kaptajn-kasper/brand/dist/logos",
+                "output": "/brand"
+              },
+              {
+                "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
               }
@@ -82,6 +92,16 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@kaptajn-kasper/brand/dist/icons",
+                "output": "/"
+              },
+              {
+                "glob": "*.svg",
+                "input": "node_modules/@kaptajn-kasper/brand/dist/logos",
+                "output": "/brand"
               },
               {
                 "glob": "**/*",

@@ -45,7 +45,7 @@ import { Difficulty, RoundCount } from '../../models/city.model';
   styles: [
     `
       .controls {
-        background: var(--brand-bg-subtle);
+        background: color-mix(in srgb, var(--kk-color-brand-purple-200) 25%, white);
         padding: 1.5rem;
         border-radius: 8px;
         margin-bottom: 1.5rem;
@@ -55,8 +55,8 @@ import { Difficulty, RoundCount } from '../../models/city.model';
       }
 
       .control-group {
-        background: var(--brand-bg-card);
-        border: 1px solid var(--brand-secondary-light-blue);
+        background: var(--kk-color-surface-container-lowest);
+        border: 1px solid var(--kk-color-brand-slate-100);
         border-radius: 10px;
         padding: 1rem;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -66,18 +66,18 @@ import { Difficulty, RoundCount } from '../../models/city.model';
         display: block;
         font-weight: 600;
         margin-bottom: 0.5rem;
-        color: var(--brand-text-primary);
+        color: var(--kk-color-on-surface);
       }
 
       .control-description {
         margin: 0 0 0.5rem 0;
-        color: var(--brand-text-secondary);
+        color: var(--kk-color-brand-slate-700);
         font-size: 0.95rem;
       }
 
       small {
         display: block;
-        color: var(--brand-text-secondary);
+        color: var(--kk-color-brand-slate-700);
         margin-top: 0.5rem;
       }
     `,

@@ -14,6 +14,16 @@ Angular-based map guessing game. Built and deployed by the shared pipeline in th
 - `Dockerfile.dev`, `docker-compose.dev.yml` — local development with live reload
 - `.github/workflows/pipeline.yml` — calls the infrastructure repo's reusable pipeline
 
+## Brand
+
+Colours, the Figtree font, logos and favicons come from `@kaptajn-kasper/brand`
+([brand-identity](https://github.com/Kaptajn-Kasper/brand-identity)), installed from
+its GitHub Release tarball. Use its `--kk-*` CSS variables or the `color`/`font`
+exports from `@kaptajn-kasper/brand`; never copy brand hex codes or logo files into
+this repo. Logos are served from `/brand/*.svg` and favicons from the site root
+(see the assets in `angular.json`). Gradient and screen background colours in
+`app.scss`/`app.ts` are app-specific and stay local.
+
 ## Deployment
 
 Do not deploy manually. The pipeline does it:
