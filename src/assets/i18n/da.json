@@ -1,72 +1,52 @@
 {
   "APP": {
     "TITLE": "Gæt en by!",
-    "SUBTITLE": "Identificer danske byer ved kun at bruge veje og vand",
-    "FOOTER": "Bygget med Angular & MapLibre GL | Data: OpenStreetMap & Danmarks Statistik"
+    "TITLE_LINE1": "Gæt",
+    "TITLE_LINE2": "en by"
   },
   "START": {
-    "DESCRIPTION": "Test din viden om danske byer ved at identificere dem ud fra deres vejnet og vandveje.",
-    "START_BUTTON": "Start spil",
-    "HOW_TO_PLAY": "Sådan spiller du",
-    "STEP1": "Vælg din sværhedsgrad og antal runder",
-    "STEP2": "Studér kortet der kun viser veje og vand",
-    "STEP3": "Tryk på det rigtige bynavn blandt de fire valgmuligheder",
-    "STEP4": "Byg din streak op for en høj score!"
-  },
-  "SETTINGS": {
-    "TITLE": "Spilindstillinger",
-    "CHOOSE_SETTINGS": "Vælg dit udfordringsniveau",
-    "DIFFICULTY_EXPLANATION": "Sværhedsgrad bestemmer hvilke byer du får. Let = store byer, Mellem = mellemstore byer, Svær = små byer.",
-    "START_PLAYING": "Start spillet →"
+    "TAGLINE": "Kig på vejene. Læs vandet. Gæt den danske by.",
+    "WHERE": "Hvor?!",
+    "GO": "Kom så!"
   },
   "CONTROLS": {
-    "ROUND_COUNT": "Antal runder",
-    "ROUND_COUNT_DESCRIPTION": "Hvor mange byer du skal gætte per spil.",
-    "POOL_SIZE": "Byer i puljen",
     "DIFFICULTY": "Sværhedsgrad",
-    "DIFFICULTY_EASY": "Let (Store byer)",
-    "DIFFICULTY_MEDIUM": "Mellem (Mellemstore byer)",
-    "DIFFICULTY_HARD": "Svær (Små byer)"
+    "DIFFICULTY_EASY": "Let",
+    "DIFFICULTY_MEDIUM": "Mellem",
+    "DIFFICULTY_HARD": "Svær",
+    "ROUNDS": "{{n}} runder",
+    "ROUNDS_ARIA": "{{n}} runder. Tryk for at ændre",
+    "POOL": "{{n}} byer i puljen",
+    "TIER_EASY": "store byer",
+    "TIER_MEDIUM": "mellemstore byer",
+    "TIER_HARD": "små byer"
   },
   "GAME": {
-    "CURRENT_STREAK": "Nuværende streak",
-    "CORRECT_SO_FAR": "Korrekte",
-    "ATTEMPTED": "Forsøg",
-    "REMAINING": "Tilbage",
-    "HIGH_SCORE": "Højeste score",
-    "ENTER_CITY": "Indtast bynavn...",
-    "SUBMIT_GUESS": "Indsend gæt",
-    "CORRECT": "Korrekt!",
-    "CORRECT_MESSAGE": "Du gættede {{city}} korrekt!",
-    "WRONG": "Forkert!",
-    "YOUR_GUESS": "Dit gæt",
-    "CORRECT_ANSWER": "Korrekt svar",
-    "STREAK_RESET": "Streak nulstillet til 0",
-    "NEXT_CITY": "Næste by →",
-    "TRY_ANOTHER": "Prøv en anden by →",
-    "CONGRATULATIONS": "Tillykke! 🎉",
-    "ALL_GUESSED": "Du har gættet alle {{count}} byer korrekt!",
-    "PERFECT_SCORE": "Perfekt score!",
-    "PLAY_AGAIN": "Spil igen →",
     "END_GAME": "Afslut spil",
-    "TOGGLE_UI": "Vis kort"
+    "ROUND": "Runde {{i}} af {{n}}",
+    "STREAK_ARIA": "Stime: {{n}}",
+    "MAP_ARIA": "Et mystisk kort med kun veje og vand",
+    "QUESTION": "Hvilken by er det?",
+    "CORRECT": "Helt rigtigt!",
+    "WRONG": "Ups!",
+    "ITS": "Det er {{city}}!",
+    "NEXT_CITY": "Næste by →",
+    "SEE_RESULTS": "Se resultat →"
   },
   "RESULTS": {
-    "PERFECT_TITLE": "Perfekt spil! 🎉",
-    "PERFECT_MESSAGE": "Du gættede alle {{count}} byer korrekt!",
-    "NEW_HIGH_SCORE_TITLE": "🏆 Ny højeste score! 🏆",
-    "NEW_HIGH_SCORE_MESSAGE": "Du opnåede en streak på {{score}} byer!",
-    "GAME_OVER_TITLE": "Spillet er slut",
-    "GAME_OVER_MESSAGE": "Du gættede {{score}} byer korrekt.",
-    "FINAL_SCORE": "Endelig score",
-    "HIGH_SCORE": "Højeste score",
-    "PLAY_AGAIN": "Spil igen",
-    "CHANGE_SETTINGS": "Skift indstillinger",
+    "NEW_HIGH_SCORE": "Ny rekord!",
+    "HIGH_SCORE": "Rekord: {{n}}",
+    "VERDICT_PERFECT": "Fejlfrit. Er du et kort?",
+    "VERDICT_GREAT": "Næsten en lokal.",
+    "VERDICT_OK": "Det bliver varmere!",
+    "VERDICT_LOW": "Tid til en roadtrip.",
+    "BEST_STREAK": "Bedste stime",
+    "ACCURACY": "Træfsikkerhed",
+    "MISSED": "Missede:",
+    "PLAY_AGAIN": "Igen!",
     "MAIN_MENU": "Hovedmenu"
   },
   "LANGUAGE": {
-    "SWITCH": "Sprog",
-    "ENGLISH": "English",
-    "DANISH": "Dansk"
+    "SWITCH_LABEL": "Sprog: dansk. Skift til engelsk"
   }
 }

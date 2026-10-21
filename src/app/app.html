@@ -1,192 +1,218 @@
-<!-- Start Screen -->
-<div class="screen start-screen" *ngIf="gameService.screenState() === 'start'">
-  <!-- Language Selector - Start screen only -->
-  <div class="language-selector-top">
-    <p-select
-      [options]="languageOptions"
-      [(ngModel)]="selectedLanguage"
-      optionLabel="label"
-      optionValue="value"
-      (onChange)="onLanguageChange()"
-      [style]="{ minWidth: '120px' }"
-    />
-  </div>
-  <div class="start-content">
-    <img
-      src="assets/brand/logo-1-color-primary-variant-3.svg"
-      alt="Kaptajn logo"
-      class="brand-logo"
-    />
-    <h1 class="game-title">{{ 'APP.TITLE' | translate }}</h1>
-    <p class="game-description">{{ 'START.DESCRIPTION' | translate }}</p>
+<!-- ───────────── Start ───────────── -->
+@if (game.screenState() === 'start') {
+<main class="screen start-screen">
+  <div class="start-top">
+    <div class="column">
+      <div class="top-row">
+        <img src="assets/brand/logo-1-color-primary-variant-3.svg" alt="Kaptajn logo" class="logo" />
+        <button
+          type="button"
+          class="sticker sticker--small"
+          (click)="toggleLanguage()"
+          [attr.aria-label]="'LANGUAGE.SWITCH_LABEL' | translate"
+        >
+          {{ language() === 'da' ? 'DA' : 'EN' }}
+        </button>
+      </div>
 
-    <p-button
-      [label]="'START.START_BUTTON' | translate"
-      (onClick)="gameService.startGame()"
-      severity="primary"
-      size="large"
-      styleClass="w-full"
-    />
-
-    <div class="how-to-play">
-      <h2>{{ 'START.HOW_TO_PLAY' | translate }}</h2>
-      <ol>
-        <li>{{ 'START.STEP1' | translate }}</li>
-        <li>{{ 'START.STEP2' | translate }}</li>
-        <li>{{ 'START.STEP3' | translate }}</li>
-        <li>{{ 'START.STEP4' | translate }}</li>
-      </ol>
+      <div class="porthole-wrap porthole-wrap--start">
+        <div class="porthole porthole--start" aria-hidden="true">
+          <svg viewBox="60 120 280 280" class="porthole-art">
+            <rect x="0" y="0" width="400" height="400" fill="#f3ecf7"></rect>
+            <path d="M0 0 H400 V70 C330 90 300 60 250 95 C210 120 230 160 190 175 C150 190 120 150 80 170 C50 185 30 160 0 175 Z" fill="#0c5460"></path>
+            <path d="M190 175 C200 210 185 240 200 280 C210 310 240 330 235 400 L215 400 C218 335 190 315 182 282 C170 240 182 210 176 178 Z" fill="#0c5460"></path>
+            <circle cx="305" cy="305" r="24" fill="#0c5460"></circle>
+            <g stroke="#432b54" fill="none" stroke-linecap="round">
+              <path d="M0 260 C80 250 140 230 400 215" stroke-width="5"></path>
+              <path d="M120 400 C130 320 110 250 140 190" stroke-width="4"></path>
+              <path d="M260 400 L270 250 C275 200 320 160 400 150" stroke-width="4"></path>
+              <path d="M40 300 L160 290 M50 330 L170 325 M60 360 L175 355 M70 220 L80 390 M100 210 L105 395 M150 200 L160 395 M230 240 L380 232 M240 275 L390 268 M250 345 L380 338 M330 200 L338 400 M362 190 L366 400 M210 130 L250 210" stroke-width="1.6"></path>
+            </g>
+          </svg>
+        </div>
+        <span class="tag tag--where">{{ 'START.WHERE' | translate }}</span>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Settings Screen -->
-<div
-  class="screen settings-screen"
-  *ngIf="gameService.screenState() === 'settings'"
->
-  <div class="settings-content">
-    <h1>{{ 'SETTINGS.TITLE' | translate }}</h1>
-    <p>{{ 'SETTINGS.CHOOSE_SETTINGS' | translate }}</p>
+  <div class="column start-bottom">
+    <h1 class="title">{{ 'APP.TITLE_LINE1' | translate }}<br />{{ 'APP.TITLE_LINE2' | translate }}</h1>
+    <p class="tagline">{{ 'START.TAGLINE' | translate }}</p>
 
-    <app-controls
-      [initialRoundCount]="gameService.roundCount()"
-      [initialDifficulty]="gameService.difficulty()"
-      [poolSize]="gameService.getPoolSize()"
-      (roundCountChange)="onRoundCountChange($event)"
-      (difficultyChange)="onDifficultyChange($event)"
-    />
+    <div class="sticker-row" role="group" [attr.aria-label]="'CONTROLS.DIFFICULTY' | translate">
+      @for (d of difficulties; track d) {
+      <button
+        type="button"
+        class="sticker"
+        [class.sticker--on]="game.difficulty() === d"
+        [attr.aria-pressed]="game.difficulty() === d"
+        [style.--tilt]="difficultyTilts[d] + 'deg'"
+        (click)="game.setDifficulty(d)"
+      >
+        {{ 'CONTROLS.DIFFICULTY_' + d.toUpperCase() | translate }}
+      </button>
+      }
+      <button
+        type="button"
+        class="sticker sticker--dashed"
+        style="--tilt: 2deg"
+        (click)="game.cycleRoundCount()"
+        [attr.aria-label]="'CONTROLS.ROUNDS_ARIA' | translate: { n: game.roundCount() }"
+      >
+        {{ 'CONTROLS.ROUNDS' | translate: { n: game.roundCount() } }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 11a8 8 0 1 0-2.3 5.7"></path>
+          <path d="M20 4v7h-7"></path>
+        </svg>
+      </button>
+    </div>
+    <p class="pool-line">
+      {{ 'CONTROLS.POOL' | translate: { n: game.poolSize() } }} ·
+      {{ 'CONTROLS.TIER_' + game.difficulty().toUpperCase() | translate }}
+    </p>
 
-    <p-button
-      [label]="'SETTINGS.START_PLAYING' | translate"
-      (onClick)="gameService.beginPlaying()"
-      severity="primary"
-      size="large"
-      styleClass="w-full"
-    />
-  </div>
-</div>
-
-<!-- Playing Screen -->
-<div
-  class="screen playing-screen"
-  *ngIf="gameService.screenState() === 'playing'"
-  (click)="onPlayingScreenTap()"
->
-  <app-map [city]="gameService.currentCity()" [style]="gameService.style()" />
-
-  <!-- Top bar: progress + streak + end game -->
-  <div class="playing-top-bar">
-    <span class="top-bar-progress">
-      {{ gameService.getAttemptedCount() }} / {{ gameService.getRoundCount() }}
-    </span>
-    <span class="top-bar-streak">
-      &#x1f525; {{ gameService.streak() }}
-    </span>
-    <button class="top-bar-end" (click)="gameService.endGame()">
-      {{ 'GAME.END_GAME' | translate }}
+    <button type="button" class="sticker sticker--cta" (click)="game.beginPlaying()">
+      {{ 'START.GO' | translate }}
     </button>
   </div>
+</main>
+}
 
-  <!-- Thumbs-down overlay for wrong answers -->
-  <div class="wrong-overlay" *ngIf="showThumbsDown">
-    <span class="wrong-overlay-emoji">&#x1F44E;</span>
-  </div>
-
-  <!-- Bottom bar: choice buttons / feedback -->
-  <div class="playing-bottom-bar">
-    <app-game
-      [choiceOptions]="gameService.choiceOptions()"
-      [totalSelectedCities]="gameService.getRoundCount()"
-      [attemptedCount]="gameService.getAttemptedCount()"
-      [remainingCount]="gameService.getRemainingCount()"
-      (guessSubmitted)="onGuessSubmitted($event)"
-      (nextCityRequested)="onNextCityRequested()"
-      (restartRequested)="onRestartRequested()"
-    />
-  </div>
-</div>
-
-<!-- Results Screen -->
-<div
-  class="screen results-screen"
-  *ngIf="gameService.screenState() === 'finished'"
->
-  <div class="results-content">
-    <!-- Perfect game -->
-    <div *ngIf="gameService.finalScore() === gameService.getRoundCount()">
-      <h1>{{ 'RESULTS.PERFECT_TITLE' | translate }}</h1>
-      <p class="results-message">
-        {{ 'RESULTS.PERFECT_MESSAGE' | translate: {count:
-        gameService.finalScore()} }}
-      </p>
-    </div>
-
-    <!-- New high score -->
-    <div
-      *ngIf="gameService.finalScore() !== gameService.getRoundCount() && gameService.isNewHighScore()"
-    >
-      <h1>{{ 'RESULTS.NEW_HIGH_SCORE_TITLE' | translate }}</h1>
-      <p class="results-message">
-        {{ 'RESULTS.NEW_HIGH_SCORE_MESSAGE' | translate: {score:
-        gameService.finalScore()} }}
-      </p>
-    </div>
-
-    <!-- Regular game over -->
-    <div
-      *ngIf="gameService.finalScore() !== gameService.getRoundCount() && !gameService.isNewHighScore()"
-    >
-      <h1>{{ 'RESULTS.GAME_OVER_TITLE' | translate }}</h1>
-      <p class="results-message">
-        {{ 'RESULTS.GAME_OVER_MESSAGE' | translate: {score:
-        gameService.finalScore()} }}
-      </p>
-    </div>
-
-    <div class="score-display">
-      <div class="score-item">
-        <span class="score-label">{{ 'RESULTS.FINAL_SCORE' | translate }}</span>
-        <span class="score-value"
-          >{{ gameService.finalScore() }} / {{ gameService.getRoundCount() }}
-          ({{ ((gameService.finalScore() / gameService.getRoundCount()) * 100)
-          | number:'1.0-0' }}%)</span
-        >
-      </div>
-      <div class="score-item">
-        <span class="score-label">{{ 'RESULTS.HIGH_SCORE' | translate }}</span>
-        <span class="score-value"
-          >{{ gameService.highScore() }} / {{ gameService.getRoundCount() }}
-          ({{ ((gameService.highScore() / gameService.getRoundCount()) * 100) |
-          number:'1.0-0' }}%)</span
-        >
-      </div>
-    </div>
-
-    <div class="results-actions">
-      <ng-container
-        *ngIf="gameService.finalScore() !== gameService.getRoundCount(); else perfectActions"
+<!-- ───────────── Playing ───────────── -->
+@if (game.screenState() === 'playing') {
+<main class="screen play-screen">
+  <div class="column play-column">
+    <div class="play-header">
+      <button
+        type="button"
+        class="sticker sticker--icon"
+        (click)="game.endGame()"
+        [attr.aria-label]="'GAME.END_GAME' | translate"
       >
-        <p-button
-          [label]="'RESULTS.PLAY_AGAIN' | translate"
-          (onClick)="playAgain()"
-          severity="primary"
-        />
-        <p-button
-          [label]="'RESULTS.MAIN_MENU' | translate"
-          (onClick)="gameService.returnToStart()"
-          severity="secondary"
-        />
-      </ng-container>
-      <ng-template #perfectActions>
-        <p-button
-          [label]="'RESULTS.MAIN_MENU' | translate"
-          (onClick)="gameService.returnToStart()"
-          severity="secondary"
-        />
-      </ng-template>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+      <span class="tag tag--lilac" style="--tilt: -2deg">
+        {{ 'GAME.ROUND' | translate: { i: game.currentRound(), n: game.totalRounds() } }}
+      </span>
+      <span class="tag tag--streak" style="--tilt: 2deg" [attr.aria-label]="'GAME.STREAK_ARIA' | translate: { n: game.streak() }">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-4 2.5-5 .3 2 1.5 3 2.5 3 0-3-1-5 0-8z"></path>
+        </svg>
+        {{ game.streak() }}
+      </span>
+    </div>
+
+    <div class="progress" aria-hidden="true">
+      @for (slot of progressSlots(); track $index) {
+      <span class="progress-slot" [class]="'progress-slot--' + slot"></span>
+      }
+    </div>
+
+    <div class="porthole-wrap">
+      <div
+        class="porthole porthole--play"
+        [class.porthole--correct]="game.gameState() === 'correct'"
+        [class.porthole--wrong]="game.gameState() === 'wrong'"
+        role="img"
+        [attr.aria-label]="'GAME.MAP_ARIA' | translate"
+      >
+        <app-map [city]="game.currentCity()" [style]="game.style()" />
+      </div>
+      @if (game.gameState() === 'correct') {
+      <span class="tag tag--feedback tag--right" role="status">{{ 'GAME.CORRECT' | translate }}</span>
+      }
+      @if (game.gameState() === 'wrong') {
+      <span class="tag tag--feedback tag--miss" role="status">{{ 'GAME.WRONG' | translate }}</span>
+      }
+    </div>
+
+    <h2 class="prompt">
+      @if (game.gameState() === 'playing') {
+      {{ 'GAME.QUESTION' | translate }}
+      } @else {
+      {{ 'GAME.ITS' | translate: { city: game.currentCity()?.name } }}
+      }
+    </h2>
+
+    <div class="choices">
+      @for (option of game.choiceOptions(); track option; let i = $index) {
+      <button
+        type="button"
+        class="sticker choice"
+        [class]="'choice--' + choiceState(option)"
+        [class.choice--long]="option.length > 12"
+        [style.--tilt]="choiceTilts[i] + 'deg'"
+        [disabled]="game.gameState() !== 'playing'"
+        (click)="choose(option)"
+      >
+        {{ option }}
+      </button>
+      }
+    </div>
+
+    @if (game.gameState() !== 'playing') {
+    <button type="button" class="sticker sticker--next" (click)="next()">
+      {{ (game.isLastRound() ? 'GAME.SEE_RESULTS' : 'GAME.NEXT_CITY') | translate }}
+    </button>
+    }
+  </div>
+</main>
+}
+
+<!-- ───────────── Results ───────────── -->
+@if (game.screenState() === 'finished') {
+<main class="screen result-screen">
+  <div class="column result-column">
+    @if (game.isNewHighScore()) {
+    <span class="tag tag--teal tag--wobble">{{ 'RESULTS.NEW_HIGH_SCORE' | translate }}</span>
+    } @else {
+    <span class="tag tag--white" style="--tilt: -3deg">{{ 'RESULTS.HIGH_SCORE' | translate: { n: game.highScore() } }}</span>
+    }
+
+    <div class="score">
+      <span class="score-big">{{ game.correctCount() }}</span>
+      <span class="score-of">/{{ game.playedCount() }}</span>
+    </div>
+    <h1 class="verdict">{{ verdictKey() | translate }}</h1>
+
+    <div class="stats">
+      <div class="stat" style="--tilt: -1deg">
+        <span class="stat-label">{{ 'RESULTS.BEST_STREAK' | translate }}</span>
+        <span class="stat-value">{{ game.bestStreak() }}</span>
+      </div>
+      <div class="stat" style="--tilt: 1.2deg">
+        <span class="stat-label">{{ 'RESULTS.ACCURACY' | translate }}</span>
+        <span class="stat-value">{{ game.accuracy() }}%</span>
+      </div>
+    </div>
+
+    <div class="result-bar" aria-hidden="true">
+      @for (r of game.results(); track $index) {
+      <span class="result-slot" [class.result-slot--correct]="r.correct"></span>
+      }
+    </div>
+
+    @if (game.missedCities().length > 0) {
+    <div class="missed">
+      <span class="missed-label">{{ 'RESULTS.MISSED' | translate }}</span>
+      @for (name of game.missedCities(); track name) {
+      <span class="missed-city">{{ name }}</span>
+      }
+    </div>
+    }
+
+    <div class="result-actions">
+      <button type="button" class="sticker sticker--cta" (click)="game.beginPlaying()">
+        {{ 'RESULTS.PLAY_AGAIN' | translate }}
+      </button>
+      <button type="button" class="sticker sticker--secondary" (click)="game.returnToStart()">
+        {{ 'RESULTS.MAIN_MENU' | translate }}
+      </button>
     </div>
   </div>
-</div>
+</main>
+}
 
 <router-outlet />

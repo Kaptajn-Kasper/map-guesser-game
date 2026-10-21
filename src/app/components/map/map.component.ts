@@ -9,6 +9,12 @@ import { City } from '../../models/city.model';
   template: `<div id="map" class="map-container"></div>`,
   styles: [
     `
+      :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
       .map-container {
         width: 100%;
         height: 100%;
@@ -20,6 +26,8 @@ import { City } from '../../models/city.model';
 export class MapComponent implements OnInit, OnDestroy {
   city = input.required<City | null>();
   style = input.required<any>();
+  /** Shown inside a ~300px round porthole, so a little further out than full screen. */
+  zoom = input<number>(11.6);
 
   private map?: Map;
 
@@ -57,7 +65,7 @@ export class MapComponent implements OnInit, OnDestroy {
       container: 'map',
       style: this.style(),
       center: [initialCity.lon, initialCity.lat],
-      zoom: 12,
+      zoom: this.zoom(),
       interactive: false, // Disable all interactions
       attributionControl: false,
     });
@@ -72,7 +80,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.map.flyTo({
       center: [city.lon, city.lat],
-      zoom: 12,
+      zoom: this.zoom(),
       duration: 1000,
       essential: true,
     });
