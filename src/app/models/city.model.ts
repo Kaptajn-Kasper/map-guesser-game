@@ -8,3 +8,8 @@ export interface City {
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
 export type RoundCount = 5 | 10 | 15;
+
+export interface RoundResult {
+  name: string;
+  correct: boolean;
+}
